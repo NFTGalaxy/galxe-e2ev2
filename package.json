@@ -1,0 +1,46 @@
+{
+  "name": "@examples/metamask",
+  "version": "0.0.13",
+  "private": true,
+  "homepage": "https://synpress.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Synthetixio/synpress.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build:cache": "synpress-cache test/playwright/wallet-setup",
+    "build:cache:headless": "synpress-cache test/playwright/wallet-setup --headless",
+    "build:cache:headless:force": "synpress-cache test/playwright/wallet-setup --headless --force",
+    "build:dist": "tsup --tsconfig tsconfig.build.json",
+    "build:types": "tsc --emitDeclarationOnly --project tsconfig.build.json",
+    "serve:test-dapp": "serve node_modules/@metamask/test-dapp/dist -p 9999",
+    "test:cypress:headful": "cypress run --browser chrome --headed",
+    "test:playwright:headful": "playwright test",
+    "test:playwright:headless": "HEADLESS=true playwright test",
+    "test:playwright:headless:ui": "HEADLESS=true playwright test --ui"
+  },
+  "dependencies": {
+    "@playwright/test": "1.48.2",
+    "@synthetixio/synpress": "4.1.1",
+    "@types/fs-extra": "^11.0.4",
+    "dotenv": "16.4.2",
+    "esbuild": "^0.27.0",
+    "tsup": "^8.5.1"
+  },
+  "devDependencies": {
+    "@metamask/test-dapp": "8.1.0",
+    "@synthetixio/synpress-cache": "0.0.13",
+    "@synthetixio/synpress-core": "0.0.13",
+    "@synthetixio/synpress-tsconfig": "0.0.13",
+    "@types/node": "20.11.17",
+    "@viem/anvil": "0.0.7",
+    "cypress": "13.15.1",
+    "fs-extra": "11.2.0",
+    "playwright-core": "1.48.2",
+    "serve": "14.2.1",
+    "typescript": "5.3.3",
+    "zod": "*"
+  }
+}
