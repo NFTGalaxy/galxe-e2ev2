@@ -22,4 +22,9 @@ test('app login', async ({ page, metamask }) => {
   await metamask.confirmSignature()
   // 确认完到登录成功有延迟
   // await page.locator('.e2e-avatar').click()
+
+    // 确认完到登录成功有延迟
+  await delay(3000)
+  await page.screenshot({ path: 'screenshot5.png', fullPage: true });
+
 })
