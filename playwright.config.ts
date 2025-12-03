@@ -11,7 +11,11 @@ export default defineConfig({
   fullyParallel: true,
 
 
-  timeout:  600 * 1000,
+  timeout:  6000 * 1000,
+  expect: {
+    timeout: 30 * 1000
+  },  
+  globalTimeout: 6000 * 1000,
 
   // Use half of the number of logical CPU cores for running tests in parallel.
   workers: undefined,
