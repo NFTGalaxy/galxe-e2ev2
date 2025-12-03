@@ -40,6 +40,4 @@ export async function connectToDapp(notificationPage: Page, accounts?: string[])
 
 
   await confirmConnection(notificationPage)
-  await notificationPage.screenshot({ path: 'notify1.png', fullPage: true })
-
 }

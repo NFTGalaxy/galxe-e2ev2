@@ -1,4 +1,4 @@
-import synpress from './synpress'
+import synpress from '../synpress'
 
 const test = synpress
 
@@ -9,10 +9,11 @@ const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 
 
-test('should confirm `personal_sign`', async ({ page, metamask }) => {
-  await page.goto('https://app.stg.galxe.com');
+test('quest creation', async ({ page, metamask }) => {
+  if(!process.env.PRIVATE_KEY) throw new Error('No private key found')
+  await page.goto('https://dashboard.stg.galxe.com');
   // await page.locator('#personalSign').click()
-  await metamask.importWalletFromPrivateKey('0x09a71425dc58b4ef068a264d93ca217204838bab2321e66c3da75580fed8f41b')
+  await metamask.importWalletFromPrivateKey(process.env.PRIVATE_KEY)
 
   await page.locator('.e2e-login-btn').click()
   await page.locator('.e2e-MetaMask').click()

@@ -1,0 +1,64 @@
+name: Run pnpm scripts when external repo updates
+
+on:
+  # 使用 repository_dispatch 事件，由“另一个仓库”来主动触发本仓库的 workflow
+  # 典型做法是在另一个仓库的 GitHub Action 里，调用 GitHub API 发送 repository_dispatch 事件。
+  repository_dispatch:
+    types:
+      - upstream_updated
+
+jobs:
+  run-pnpm-scripts:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出当前仓库代码
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2. 设置 Node.js 版本（根据你项目实际 Node 版本修改）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      # 3. 安装 pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # 4. 安装依赖
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. 运行你想要执行的 pnpm 脚本
+      #    这里改为运行 Playwright 的无头测试脚本：test:playwright:headless
+      - name: Run pnpm script (test:playwright:headless)
+        run: pnpm run test:playwright:headless
+
+      # 6. 可选：根据需要添加更多步骤（例如构建、部署等）
+      # - name: Build
+      #   run: pnpm run build
+
+      # - name: Run e2e tests
+      #   run: pnpm run e2e
+
+      # 说明：如何从“另一个仓库”触发本 workflow
+      #
+      # 方案示例（在另一个仓库的 GitHub Action 中）：
+      #
+      # - name: Trigger downstream repo
+      #   env:
+      #     GH_TOKEN: ${{ secrets.DOWNSTREAM_TRIGGER_TOKEN }} # 在“另一个仓库”中配置的 PAT，需有 repo 权限
+      #   run: |
+      #     curl -X POST \
+      #       -H "Accept: application/vnd.github+json" \
+      #       -H "Authorization: Bearer $GH_TOKEN" \
+      #       https://api.github.com/repos/<owner>/<this-repo-name>/dispatches \
+      #       -d '{"event_type": "upstream_updated"}'
+      #
+      # 注意：
+      # - 把 <owner> 和 <this-repo-name> 替换成本仓库的 owner 和 repo 名称
+      # - event_type 要与上方 on.repository_dispatch.types 中的名称一致（这里是 "upstream_updated"）
