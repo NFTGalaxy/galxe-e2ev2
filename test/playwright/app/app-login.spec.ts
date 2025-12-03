@@ -14,17 +14,23 @@ test('app login', async ({ page, metamask }) => {
   // await page.locator('#personalSign').click()
   await metamask.importWalletFromPrivateKey('0xbf54083c4ac85ea4720d19a0b9d1b3cc3230e77b9693424a653fb81d96c86932')
 
+  console.log('importWalletFromPrivateKey success')
+
   await page.locator('.e2e-login-btn').click()
+  await delay(1000)
+  console.log('click login btn success')
   await page.locator('.e2e-MetaMask').click()
+  console.log('click metamask btn success')
   await metamask.connectToDapp()
+  console.log('connectToDapp success')
   // 弹窗之间有延迟
   await delay(3000)
   await metamask.confirmSignature()
-  // 确认完到登录成功有延迟
-  // await page.locator('.e2e-avatar').click()
-
-    // 确认完到登录成功有延迟
+  console.log('confirmSignature success')
   await delay(3000)
-  await page.screenshot({ path: 'screenshot5.png', fullPage: true });
 
+  // 确认完到登录成功有延迟
+  await page.locator('.e2e-avatar').click()
+    // 确认完到登录成功有延迟
+  // await page.screenshot({ path: 'screenshot5.png', fullPage: true });
 })
