@@ -1,0 +1,36 @@
+name: Run Playwright headless tests on main updates
+
+on:
+  # 当本仓库的 main 分支有代码更新（push）时触发
+  push:
+    branches:
+      - main
+
+jobs:
+  test-playwright-headless:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 检出当前仓库代码
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. 设置 Node.js 版本，并启用 pnpm 缓存
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 3. 安装 pnpm（避免 "Unable to locate executable file: pnpm" 错误）
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+
+      # 4. 安装依赖
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. 运行 Playwright 头less 测试脚本
+      - name: Run Playwright tests (headless)
+        run: pnpm run test:playwright:headless
