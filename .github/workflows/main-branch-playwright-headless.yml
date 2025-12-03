@@ -35,6 +35,10 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
-      # 5. 运行 Playwright 头less 测试脚本
+      # 6. 运行 Playwright 头less 测试脚本
+      - name: build wallet tests (headless)
+        run: pnpm run build:cache:headless
+
+      # 7. 运行 Playwright 头less 测试脚本
       - name: Run Playwright tests (headless)
         run: pnpm run test:playwright:headless
