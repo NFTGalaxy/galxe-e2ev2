@@ -19,13 +19,13 @@ export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
 
   await metamask.toggleDismissSecretRecoveryPhraseReminder()
 
-  const page = await context.newPage()
+  // const page = await context.newPage()
 
-  await page.goto('http://localhost:9999')
+  // await page.goto('http://localhost:9999')
 
-  await page.locator('#connectButton').click()
+  // await page.locator('#connectButton').click()
 
-  await metamask.connectToDapp()
+  // await metamask.connectToDapp()
 
-  await page.close()
+  // await page.close()
 })

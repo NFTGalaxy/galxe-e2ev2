@@ -31,10 +31,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 4. 安装依赖
-      - name: Install dependencies
-        run: pnpm run serve:test-dapp
-
       # 5. 安装 Playwright 浏览器（包含系统依赖）
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
