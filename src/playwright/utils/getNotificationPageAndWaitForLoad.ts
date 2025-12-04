@@ -26,14 +26,20 @@ export async function getNotificationPageAndWaitForLoad(context: BrowserContext,
         })
       }
 
+      console.log('notificationPage', notificationPage)
+
       // Ensure page is fully loaded
       await waitUntilStable(notificationPage as Page)
+
+      console.log('waitUntilStable success')
 
       // Set pop-up window viewport size to resemble the actual MetaMask pop-up window
       await notificationPage.setViewportSize({
         width: 360,
         height: 592
       })
+
+      console.log('setViewportSize success')
 
       try {
         // First attempt to position the window using CDP directly
