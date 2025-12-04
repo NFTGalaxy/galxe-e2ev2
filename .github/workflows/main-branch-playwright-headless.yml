@@ -31,20 +31,30 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 5. 安装 Playwright 浏览器（包含系统依赖）
+      # 5. 安装 X Server (xvfb) - 用于支持 headed 模式的浏览器（如果需要）
+      # 注意：如果只使用 headless 模式，可以跳过此步骤
+      - name: Install X Server (xvfb)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          echo "✅ X Server (xvfb) 已安装"
+
+      # 6. 安装 Playwright 浏览器（包含系统依赖）
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
       # 6. 运行 Playwright 头less 测试脚本
       - name: build wallet tests (headless)
-        run: pnpm run build:cache
+        run: xvfb-run -a pnpm run build:cache
 
-      # 7. 运行 Playwright 头less 测试脚本
+      # 8. 运行 Playwright 测试（headless 模式）
+      # 如果需要在 headed 模式下运行，可以使用 xvfb-run 包装命令：
+      # run: xvfb-run -a pnpm run test:playwright:headful
       - name: Run Playwright tests (headless)
         run: pnpm run test:playwright:headless
         continue-on-error: true # 即使测试失败也继续执行，以便上传截图和视频
 
-      # 8. 上传测试结果（包含截图、视频和 trace 文件）
+      # 9. 上传测试结果（包含截图、视频和 trace 文件）
       - name: Upload test results
         if: always() # 无论测试成功或失败都上传
         uses: actions/upload-artifact@v4
