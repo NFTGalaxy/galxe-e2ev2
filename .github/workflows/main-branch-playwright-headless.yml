@@ -41,7 +41,7 @@ jobs:
 
       # 6. 安装 Playwright 浏览器（包含系统依赖）
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps
+        run: pnpm exec playwright install
 
       # 6. 运行 Playwright 头less 测试脚本
       - name: build wallet tests (headless)
