@@ -4,9 +4,9 @@ import { waitForMetaMaskLoad, waitUntilStable } from './waitFor'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-const NOTIFICATION_PAGE_TIMEOUT = 10000
+const NOTIFICATION_PAGE_TIMEOUT = 30000
 
-export async function getNotificationPageAndWaitForLoad(context: BrowserContext, extensionId: string, maxRetries = 2) {
+export async function getNotificationPageAndWaitForLoad(context: BrowserContext, extensionId: string, maxRetries = 3) {
   const notificationPageUrl = `chrome-extension://${extensionId}/notification.html`
   const isNotificationPage = (page: Page) => page.url().includes(notificationPageUrl)
 
