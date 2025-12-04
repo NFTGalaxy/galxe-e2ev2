@@ -22,7 +22,11 @@ export default defineConfig({
 
   use: {
     // We are using locally deployed MetaMask Test Dapp.
-    baseURL: 'https://app.stg.galxe.com'
+    baseURL: 'https://app.stg.galxe.com',
+    // 在测试失败时自动截图和录制视频
+    screenshot: 'only-on-failure', // 'on' | 'off' | 'only-on-failure'
+    video: 'retain-on-failure',    // 'on' | 'off' | 'retain-on-failure' | 'on-first-retry'
+    trace: 'retain-on-failure'      // 保留失败时的 trace 文件，方便调试
   },
 
   // Synpress currently only supports Chromium, however, this will change in the future.

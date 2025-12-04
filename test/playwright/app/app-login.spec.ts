@@ -16,11 +16,23 @@ test('app login', async ({ page, metamask }) => {
 
   console.log('importWalletFromPrivateKey success')
 
+  // 或者截图到 test-results 目录（会自动上传）
+  await page.screenshot({ 
+    path: 'test-results/import.png',
+    fullPage: true 
+  });
+
   await page.locator('.e2e-login-btn').click()
   await delay(1000)
   console.log('click login btn success')
   await page.locator('.e2e-MetaMask').click()
   console.log('click metamask btn success')
+
+  // 或者截图到 test-results 目录（会自动上传）
+  await page.screenshot({ 
+    path: 'test-results/click.png',
+    fullPage: true 
+  });
   await metamask.connectToDapp()
   console.log('connectToDapp success')
   // 弹窗之间有延迟

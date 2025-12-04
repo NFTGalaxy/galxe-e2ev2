@@ -42,3 +42,34 @@ jobs:
       # 7. 运行 Playwright 头less 测试脚本
       - name: Run Playwright tests (headless)
         run: pnpm run test:playwright:headless
+        continue-on-error: true # 即使测试失败也继续执行，以便上传截图和视频
+
+      # 8. 上传测试结果（包含截图、视频和 trace 文件）
+      - name: Upload test results
+        if: always() # 无论测试成功或失败都上传
+        uses: actions/upload-artifact@v4
+        id: upload-artifact
+        with:
+          name: playwright-test-results
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 30 # 保留 30 天
+          if-no-files-found: ignore # 如果没有文件也不报错
+
+      # 9. 输出 Artifact 下载链接（方便查看）
+      - name: Output artifact download link
+        if: always()
+        run: |
+          echo "📦 Artifact 已上传！"
+          echo "🔗 查看和下载链接："
+          echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo ""
+          echo "💡 提示："
+          echo "   1. 点击上面的链接进入 workflow run 页面"
+          echo "   2. 滚动到页面底部找到 'Artifacts' 区域"
+          echo "   3. 点击 'playwright-test-results' 即可下载"
+          echo ""
+          echo "📁 Artifact 包含："
+          echo "   - test-results/ (截图、视频、trace 文件)"
+          echo "   - playwright-report/ (HTML 测试报告)"
