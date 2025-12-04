@@ -18,6 +18,8 @@ export async function getNotificationPageAndWaitForLoad(context: BrowserContext,
       // Check if notification page is already open
       notificationPage = context.pages().find(isNotificationPage)
 
+      console.log('context.pages()', context.pages())
+
       if (!notificationPage) {
         // Wait for notification page to appear with timeout
         notificationPage = await context.waitForEvent('page', {
@@ -26,7 +28,7 @@ export async function getNotificationPageAndWaitForLoad(context: BrowserContext,
         })
       }
 
-      console.log('notificationPage', notificationPage)
+      // console.log('notificationPage', notificationPage)
 
       // Ensure page is fully loaded
       await waitUntilStable(notificationPage as Page)

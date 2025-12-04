@@ -66,7 +66,7 @@ export const metaMaskFixtures = (walletSetup: ReturnType<typeof defineWalletSetu
       }
 
       const context = await chromium.launchPersistentContext(_contextPath, {
-        headless: false,
+        headless: true,
         args: browserArgs,
         slowMo: process.env.HEADLESS ? 0 : slowMo
       })
