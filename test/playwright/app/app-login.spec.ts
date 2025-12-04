@@ -23,11 +23,16 @@ test('app login', async ({ page, metamask }) => {
   });
 
   await page.locator('.e2e-login-btn').click()
-  await delay(1000)
+  await delay(3000)
   console.log('click login btn success')
+    // 或者截图到 test-results 目录（会自动上传）
+  await page.screenshot({ 
+    path: 'test-results/login-module.png',
+    fullPage: true 
+  });
   await page.locator('.e2e-MetaMask').click()
   console.log('click metamask btn success')
-
+  await delay(15000)
   // 或者截图到 test-results 目录（会自动上传）
   await page.screenshot({ 
     path: 'test-results/click.png',
