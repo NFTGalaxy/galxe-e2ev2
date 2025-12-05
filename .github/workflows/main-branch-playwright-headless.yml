@@ -75,7 +75,7 @@ jobs:
 
       # 8. 构建 wallet cache（headless 模式）
       - name: Build wallet cache (headless)
-        run: xvfb-run -a pnpm run build:cache:headless
+        run: pnpm run build:cache:headless
 
       # 9. 运行 Playwright 测试（headless 模式）
       # 如果需要在 headed 模式下运行，可以使用 xvfb-run 包装命令：
