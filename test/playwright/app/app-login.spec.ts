@@ -37,7 +37,7 @@ test('app login', async ({ page, metamask }) => {
     fullPage: true 
   });
   await metamask.connectToDapp()
-  console.log('connectToDapp success')
+  console.log('connectToDapp success1')
   // 弹窗之间有延迟
   await delay(3000)
   await metamask.confirmSignature()
