@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test'
 import Selectors from '../../../../selectors/pages/NotificationPage'
 
 const signMessage = async (notificationPage: Page) => {
-  await notificationPage.screenshot({path:'zzz.png',fullPage:true})
+  // await notificationPage.screenshot({path:'zzz.png',fullPage:true})
   await notificationPage.locator(Selectors.ActionFooter.confirmActionButton).click()
 }
 
