@@ -32,7 +32,8 @@ test('app login', async ({ page, metamask }) => {
   });
   await page.locator('.e2e-MetaMask').click()
   console.log('click metamask btn success')
-  await delay(15000)
+  await delay(5000)
+  await page.locator('.e2e-MetaMask').click()
   // 或者截图到 test-results 目录（会自动上传）
   await page.screenshot({ 
     path: 'test-results/click.png',
