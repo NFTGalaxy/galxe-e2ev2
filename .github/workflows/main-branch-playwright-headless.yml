@@ -39,22 +39,63 @@ jobs:
           sudo apt-get install -y xvfb
           echo "✅ X Server (xvfb) 已安装"
 
-      # 6. 安装 Playwright 浏览器（包含系统依赖）
+      # 6. 启动 Test Dapp 服务器（后台运行）并等待就绪
+      - name: Start Test Dapp server
+        run: |
+          # 启动服务器（后台运行）
+          pnpm run serve:test-dapp &
+          SERVER_PID=$!
+          echo "SERVER_PID=$SERVER_PID" >> $GITHUB_ENV
+          echo "Test Dapp 服务器进程已启动 (PID: $SERVER_PID)"
+
+          # 等待服务器启动就绪（最多等待 60 秒）
+          echo "等待 Test Dapp 服务器启动并检查健康状态..."
+          timeout=60
+          elapsed=0
+
+          # 使用 curl 检查服务器是否就绪（ubuntu-latest 自带 curl）
+          while ! curl -f -s http://localhost:9999 > /dev/null 2>&1; do
+            if [ $elapsed -ge $timeout ]; then
+              echo "❌ 服务器启动超时（${timeout}秒）"
+              echo "检查服务器进程状态..."
+              ps aux | grep -E "serve|9999" || true
+              exit 1
+            fi
+            sleep 2
+            elapsed=$((elapsed + 2))
+            echo "等待中... (${elapsed}/${timeout}秒)"
+          done
+
+          echo "✅ Test Dapp 服务器已启动并就绪！"
+          echo "服务器地址: http://localhost:9999"
+
+      # 7. 安装 Playwright 浏览器（包含系统依赖）
       - name: Install Playwright browsers
         run: pnpm exec playwright install
 
-      # 6. 运行 Playwright 头less 测试脚本
-      - name: build wallet tests (headless)
+      # 8. 构建 wallet cache（headless 模式）
+      - name: Build wallet cache (headless)
         run: xvfb-run -a pnpm run build:cache
 
-      # 8. 运行 Playwright 测试（headless 模式）
+      # 9. 运行 Playwright 测试（headless 模式）
       # 如果需要在 headed 模式下运行，可以使用 xvfb-run 包装命令：
       # run: xvfb-run -a pnpm run test:playwright:headful
       - name: Run Playwright tests (headless)
         run: pnpm run test:playwright:headless
         continue-on-error: true # 即使测试失败也继续执行，以便上传截图和视频
 
-      # 9. 上传测试结果（包含截图、视频和 trace 文件）
+      # 10. 停止 Test Dapp 服务器（清理）
+      - name: Stop Test Dapp server
+        if: always()
+        run: |
+          if [ ! -z "$SERVER_PID" ]; then
+            echo "停止 Test Dapp 服务器 (PID: $SERVER_PID)"
+            kill $SERVER_PID 2>/dev/null || true
+          fi
+          # 也尝试通过端口查找并停止
+          pkill -f "serve.*9999" || true
+
+      # 11. 上传测试结果（包含截图、视频和 trace 文件）
       - name: Upload test results
         if: always() # 无论测试成功或失败都上传
         uses: actions/upload-artifact@v4

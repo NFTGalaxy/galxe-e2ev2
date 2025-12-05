@@ -19,7 +19,9 @@
     "test:cypress:headful": "cypress run --browser chrome --headed",
     "test:playwright:headful": "playwright test",
     "test:playwright:headless": "HEADLESS=true playwright test",
-    "test:playwright:headless:ui": "HEADLESS=true playwright test --ui"
+    "test:playwright:headless:ui": "HEADLESS=true playwright test --ui",
+    "test:local": "bash run-local-tests.sh",
+    "test:local:ci": "pnpm install --frozen-lockfile && pnpm exec playwright install --with-deps && pnpm run build:cache:headless && pnpm run test:playwright:headless"
   },
   "dependencies": {
     "@playwright/test": "1.48.2",
