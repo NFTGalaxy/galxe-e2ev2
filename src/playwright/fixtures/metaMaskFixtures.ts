@@ -111,7 +111,7 @@ export const metaMaskFixtures = (walletSetup: ReturnType<typeof defineWalletSetu
       await use(metamask)
     },
     page: async ({ page }, use) => {
-      await page.goto('/')
+      // await page.goto('/')
 
       await use(page)
     },
