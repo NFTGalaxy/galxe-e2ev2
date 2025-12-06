@@ -29,7 +29,7 @@ jobs:
 
       # 4. 安装依赖
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       # 5. 安装 X Server (xvfb) - 用于支持 headed 模式的浏览器（如果需要）
       # 注意：如果只使用 headless 模式，可以跳过此步骤
