@@ -37,6 +37,12 @@ test('app login', async ({ page, metamask }) => {
     fullPage: true 
   });
   await metamask.connectToDapp()
+
+  await metamask.page.screenshot({ 
+    path: 'test-results/mm-page.png',
+    fullPage: true 
+  });
+  
   console.log('connectToDapp success1')
   // 弹窗之间有延迟
   await delay(3000)
