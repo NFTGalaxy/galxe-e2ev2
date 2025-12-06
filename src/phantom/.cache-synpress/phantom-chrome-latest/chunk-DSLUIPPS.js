@@ -1,0 +1,2 @@
+import{a as s}from"./chunk-LELMSWC2.js";import{a as c,g as o,i as f,n as l}from"./chunk-NSVULBS3.js";f();l();var e=o(s(),1);var i=c((u,n=1e3)=>{let t=(0,e.useRef)(!1),r=(0,e.useRef)(null);return(0,e.useEffect)(()=>()=>{r.current&&clearTimeout(r.current)},[]),(0,e.useCallback)(()=>{t.current||(t.current=!0,u(),r.current&&clearTimeout(r.current),r.current=setTimeout(()=>{t.current=!1},n))},[u,n])},"useDebouncedCallback");export{i as a};
+//# sourceMappingURL=chunk-DSLUIPPS.js.map

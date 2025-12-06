@@ -1,15 +1,25 @@
-import synpress from '../synpress'
+// import synpress from '../synpress'
 
-const test = synpress
+// const test = synpress
 
-const { expect } = test
+// const { expect } = test
+
+
+import { testWithSynpress } from '@synthetixio/synpress-core'
+import { MetaMask, metaMaskFixtures } from '../../../src/playwright'
+
+import basicSetup from '../wallet-setup/basic.setup'
+
+const test = testWithSynpress(metaMaskFixtures(basicSetup))
 
 
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
 
+test('app login', async ({ context, page, extensionId }) => {
 
-test('app login', async ({ page, metamask }) => {
+  const metamask = new MetaMask(context, page, basicSetup.walletPassword, extensionId)
+
   await page.goto('https://app.stg.galxe.com');// test
   // await page.locator('#personalSign').click()
 
