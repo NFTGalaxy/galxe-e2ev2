@@ -16,7 +16,7 @@ test('should connect multiple wallets to dapp', async ({ context, page, phantomP
   await phantom.addNewAccount('NewAccount1')
   await phantom.addNewAccount('NewAccount2')
 
-  await page.goto('https://app.stg.galxe.com');// test
+  await page.goto('https://app.galxe.com');// test
   // Delay to avoid random fail
 
 
