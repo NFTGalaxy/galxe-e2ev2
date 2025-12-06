@@ -33,16 +33,19 @@ test('app login', async ({ page, metamask }) => {
   await page.locator('.e2e-MetaMask').click()
   // 或者截图到 test-results 目录（会自动上传）
   await page.screenshot({ 
-    path: 'test-results/click.png',
+    path: 'test-results/click222.png',
     fullPage: true 
   });
-  await metamask.connectToDapp()
+
 
   await metamask.page.screenshot({ 
-    path: 'test-results/mm-page.png',
+    path: 'test-results/mm-page222.png',
     fullPage: true 
   });
-  
+
+  await metamask.connectToDapp()
+
+
   console.log('connectToDapp success1')
   // 弹窗之间有延迟
   await delay(3000)
