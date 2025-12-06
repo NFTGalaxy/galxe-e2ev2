@@ -175,7 +175,7 @@ export class MetaMask extends MetaMaskAbstract {
       throw NO_EXTENSION_ID_ERROR
     }
 
-    console.log('xxxxxx', this.extensionId, accounts)
+    console.log('ddddddddddd', this.notificationPage)
     await this.notificationPage.connectToDapp(this.extensionId, accounts)
 
   }
