@@ -20,7 +20,7 @@ test('app login', async ({ context, page, extensionId }) => {
 
   const metamask = new MetaMask(context, page, basicSetup.walletPassword, extensionId)
 
-  await page.goto('https://app.stg.galxe.com');// test
+  await page.goto('https://app.galxe.com');// test
   // await page.locator('#personalSign').click()
 
   // 或者截图到 test-results 目录（会自动上传）
