@@ -27,7 +27,6 @@ export async function getExtensionId(context: BrowserContext, extensionName: str
   const unparsedExtensions = await page.evaluate('chrome.management.getAll()')
 
   const allExtensions = Extensions.parse(unparsedExtensions)
-  console.log('xxxxx,',allExtensions)
   const targetExtension = allExtensions.find(
     (extension) => extension.name.toLowerCase() === extensionName.toLowerCase()
   )
