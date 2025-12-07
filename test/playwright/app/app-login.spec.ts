@@ -1,9 +1,3 @@
-// import synpress from '../synpress'
-
-// const test = synpress
-
-// const { expect } = test
-
 
 import { testWithSynpress } from '@synthetixio/synpress-core'
 import { MetaMask, metaMaskFixtures } from '../../../src/playwright'
@@ -15,13 +9,6 @@ const test = testWithSynpress(metaMaskFixtures(basicSetup))
 
 const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
 
-
-import { test as Test2,  expect } from "@playwright/test";
-
-Test2("check browser version", async ({ browser }) => {
-  const version = browser.version();
-  console.log(`xxxBrowser version:xxxxxx ${version}`);
-});
 
 test('app login', async ({ context, page, extensionId }) => {
 
