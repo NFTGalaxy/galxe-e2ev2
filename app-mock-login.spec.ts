@@ -20,7 +20,7 @@ test("check browser version", async ({ context, page, extensionId }) => {
   const cookies = [
     {
       name: 'galxe-id',
-      value: 'tmgZNsiuv4pnNk6rxC62bc',
+      value: '2AFvyjb7DJXeAquZtqbzj3',
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -40,7 +40,7 @@ test("check browser version", async ({ context, page, extensionId }) => {
     },
     {
       name: 'auth-token',
-      value: '{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItOTM4ODU0MDIzLjE3NjUwMjk4ODIiLCJHYWx4ZUlEIjoidG1nWk5zaXV2NHBuTms2cnhDNjJiYyIsImV4cCI6MTc2NTcxODI4MCwianRpIjoiYjk3MDYyY2JhNzg2OTkyYzE4MDAxZjY4NDk5NGU3MzI1NjNjNWNiMWU3ZDExZmY5YzllNjQ2ZGY2ZTcxNGQyZSIsIkFkZHJlc3MiOiIweDkzQ2IxYTRBOUJkZWEwOTE2MjU0ODI0M2ZEMjk4RjU3Y0ZjMjdGNzAiLCJBZGRyZXNzVHlwZSI6MSwiQWNjb3VudFVzZXJuYW1lIjoiIn0.fUVUZwkZOZaqGewTzHKqGB0QeofiL5wE1bXtpLY6Rdo"}',
+      value: '{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItNzc4MDM4NDUyLjE3NjUyNDc5MjciLCJHYWx4ZUlEIjoiMkFGdnlqYjdESlhlQXF1WnRxYnpqMyIsImV4cCI6MTc2ODI4ODU5NCwianRpIjoiY2FjMjNkZmUzNzJiNDFkMjQ4NWU2NTFkNGI5MzhhMDlhNjRhOWNkYWViMzU4MDliN2Y0NGQ0ODBhMjA3YjBhOCIsIkFkZHJlc3MiOiIweDIxYjEyNDdDMEU3ODIyYTlhMTQyNzE4OTYyMDE1ZkFmMmZGNzljNmYiLCJBZGRyZXNzVHlwZSI6MSwiQWNjb3VudFVzZXJuYW1lIjoiIn0.8Vdi_NSH2J7oEj7kiSknkj7gRF6TzhlPdcmF8vwqGyo"}',
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -60,7 +60,7 @@ test("check browser version", async ({ context, page, extensionId }) => {
     },
     {
       name: 'account',
-      value: 'EVM:0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70',
+      value: 'EVM:0x21b1247C0E7822a9a142718962015fAf2fF79c6f',
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -70,7 +70,7 @@ test("check browser version", async ({ context, page, extensionId }) => {
     },
     {
       name: 'wagmi.store',
-      value: '{"state":{"connections":{"__type":"Map","value":[["47eff801640",{"accounts":["0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70"],"chainId":56,"connector":{"id":"metaMaskSDK","name":"MetaMask","type":"metaMask","uid":"47eff801640"}}]]},"chainId":56,"current":"47eff801640"},"version":2}',
+      value: '{"state":{"connections":{"__type":"Map","value":[["f480d5c8f75",{"accounts":["0x21b1247C0E7822a9a142718962015fAf2fF79c6f"],"chainId":56,"connector":{"id":"metaMaskSDK","name":"MetaMask","type":"metaMask","uid":"f480d5c8f75"}}],["50e3a37087b",{"accounts":["0x08314d54F0d43dA8cc6016bDA324a4dA3D0d770C"],"chainId":1,"connector":{"id":"app.phantom","name":"Phantom","type":"injected","uid":"50e3a37087b"}}]]},"chainId":56,"current":"f480d5c8f75"},"version":2}',
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -85,11 +85,18 @@ test("check browser version", async ({ context, page, extensionId }) => {
 
     // Now, navigate to a page within the domain where the cookies are set
   // const page = await context.newPage();
-  await page.goto('https://app.galxe.com');// test
+  await page.goto('https://dashboard.galxe.com');// test
 
   await delay(3000)
-  await page.screenshot({ 
-  path: 'test-results/mock-login.png',
-  fullPage: true 
-});
+
+  await page.screenshot({ path: 'test-results/screenshot5.png', fullPage: true });
+
+
+  // 确认完到登录成功有延迟
+  // await page.locator('.e2e-avatar').click()
+  // await delay(3000)
+  // await page.screenshot({ 
+  //   path: 'test-results/mock-login.png',
+  //   fullPage: true 
+  // });
 });
