@@ -33,7 +33,9 @@ test('app login', async ({ context, page, extensionId }) => {
 
   await page.goto('https://dashboard.galxe.com/overview?space=82361');// test
 
-   await page.screenshot({ path: 'test-results/dashboard-space.png', fullPage: true });
+
+  await delay(3000)
+  await page.screenshot({ path: 'test-results/dashboard-space.png', fullPage: true });
 
 
 })
