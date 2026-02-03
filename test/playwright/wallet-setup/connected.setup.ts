@@ -20,13 +20,14 @@ export default defineWalletSetup(PASSWORD, async (context, walletPage) => {
   await metamask.toggleDismissSecretRecoveryPhraseReminder()
 
 
-  await metamask.importWalletFromPrivateKey('0xbf54083c4ac85ea4720d19a0b9d1b3cc3230e77b9693424a653fb81d96c86932')
+  // await metamask.importWalletFromPrivateKey('0xbf54083c4ac85ea4720d19a0b9d1b3cc3230e77b9693424a653fb81d96c86932')
+  await metamask.importWalletFromPrivateKey('0x09a71425dc58b4ef068a264d93ca217204838bab2321e66c3da75580fed8f41b')
 
   console.log('importWalletFromPrivateKey success')
 
-  walletPage.screenshot({ 
+  walletPage.screenshot({
     path: 'test-results/wallet-page.png',
-    fullPage: true 
+    fullPage: true
   })
 
   // const page = await context.newPage()

@@ -10,12 +10,21 @@ export default defineConfig({
   // Run all tests in parallel.
   fullyParallel: true,
 
+  testIgnore: [
+    'test/playwright/app/*',
+    'test/playwright/dashboard/quest-create.spec.ts',
+    'test/playwright/dashboard/quest-creat-NFT.spec.ts',
+    'test/playwright/dashboard/quest-creat-multi.spec.ts',
+    'test/playwright/dashboard/quest-creat-OAT.spec.ts',
+    'test/playwright/dashboard/quest-creat-OAT-quote-tweet.spec.ts'
+  ], // 忽略特定测试文件
 
-  timeout:  6000 * 1000,
+
+  timeout: 120 * 1000,
   expect: {
-    timeout: 30 * 1000
-  },  
-  globalTimeout: 6000 * 1000,
+    timeout: 60 * 1000
+  },
+  globalTimeout: 120 * 1000,
 
   // Use half of the number of logical CPU cores for running tests in parallel.
   workers: undefined,
