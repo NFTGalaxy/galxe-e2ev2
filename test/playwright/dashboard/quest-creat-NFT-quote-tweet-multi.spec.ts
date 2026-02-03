@@ -1,0 +1,80 @@
+import { testWithSynpress } from '@synthetixio/synpress-core'
+import { metaMaskFixtures } from '../../../src/playwright'
+import basicSetup from '../wallet-setup/basic.setup'
+import { handleLogin } from '../util';
+import { delay, nextStep } from '../utils/actions';
+// Step 1: 基本信息设置
+import { setStep1 } from '../utils/step1';
+// Step 2: 奖励设置 - NFT
+import { setRewardTypeNftUploadMediaNameContractCap12 } from '../utils/step2';
+// Step 3: 任务/凭证设置
+import { 
+  createXQuoteTweetCredential, 
+  setMultiCredential, 
+  selectVerifyBeforeTasks 
+} from '../utils/step3';
+
+const test = testWithSynpress(metaMaskFixtures(basicSetup))
+
+const domain = "https://galxe-web-dashboard-git-feat-likaiagent-e2e-galxe.vercel.app"
+// const domain = "https://dashboard.galxe.com"
+
+/**
+ * 测试用例：创建 NFT 奖励类型的 Quest，使用 X Quote Tweet 凭证和多维 cred，并打开 verifyBeforeTasks
+ * 
+ * 测试流程：
+ * 1. Step 1: 设置 Quest 基本信息（标题、日期范围）
+ * 2. Step 2: 设置 NFT 奖励（上传媒体、名称、合约、铸造上限 12）
+ * 3. Step 3: 
+ *    - 打开 verifyBeforeTasks
+ *    - 设置 X Quote Tweet 凭证
+ *    - 设置多维 cred
+ */
+test('NFT reward with X Quote Tweet credential and multi dimension credential, verify before tasks enabled', async ({ context, page, extensionId }) => {
+  // 1. 登录和导航到 Quest 创建页面
+  const testPage = await handleLogin(domain, context, page, extensionId)
+  await testPage.goto(`${domain}/quest/create?space=192`)
+  
+  // 等待页面加载
+  await delay(3000)
+  
+  // 2. Step 1: 设置基本信息（标题、日期范围）
+  await setStep1(testPage)
+  await delay(3000)
+  await testPage.screenshot({ path: 'test-results/nft-quote-tweet-multi-step1.png', fullPage: true })
+  
+  console.log('-------------------------------- Step 1 completed --------------------------------')
+  
+  // 3. 进入下一步（奖励设置页面）
+  await nextStep(testPage)
+  
+  // 4. Step 2: 设置 NFT 奖励类型
+  await setRewardTypeNftUploadMediaNameContractCap12(testPage)
+  await testPage.screenshot({ path: 'test-results/nft-quote-tweet-multi-step2.png', fullPage: true })
+  
+  console.log('-------------------------------- Step 2 completed --------------------------------')
+  
+  // 5. 进入下一步（任务设置页面）
+  await nextStep(testPage)
+  
+  // 6. Step 3: 设置任务和凭证
+  // 6.1 首先打开 verifyBeforeTasks
+  await selectVerifyBeforeTasks(testPage)
+  console.log('-------------------------------- Verify Before Tasks enabled --------------------------------')
+  
+  // 6.2 设置 X Quote Tweet 凭证
+  await createXQuoteTweetCredential(testPage)
+  console.log('-------------------------------- X Quote Tweet credential created --------------------------------')
+  
+  // 6.3 设置多维 cred
+  await setMultiCredential(testPage)
+  console.log('-------------------------------- Multi dimension credential set --------------------------------')
+  
+  await delay(2000)
+  await testPage.screenshot({ path: 'test-results/nft-quote-tweet-multi-step3.png', fullPage: true })
+  
+  console.log('-------------------------------- Step 3 completed --------------------------------')
+  
+  // 7. 最终截图
+  await testPage.screenshot({ path: 'test-results/nft-quote-tweet-multi-final.png', fullPage: true })
+})

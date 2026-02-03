@@ -1,4 +1,4 @@
-const delay = (ms:number) => new Promise(res => setTimeout(res, ms));
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 import { test as Test2, chromium } from "@playwright/test";
 
@@ -10,14 +10,8 @@ import basicSetup from '../wallet-setup/basic.setup'
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup))
 
-
-test("check browser version", async ({ context, page, extensionId }) => {
-
-  // const browser = await chromium.launch();
-  // const context = await browser.newContext();
-
-    // Define the cookies to be set
-  const cookies = [
+const getCookies = () => {
+  return [
     {
       name: 'galxe-id',
       value: '2AFvyjb7DJXeAquZtqbzj3',
@@ -40,7 +34,7 @@ test("check browser version", async ({ context, page, extensionId }) => {
     },
     {
       name: 'auth-token',
-      value: '{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItNzc4MDM4NDUyLjE3NjUyNDc5MjciLCJHYWx4ZUlEIjoiMkFGdnlqYjdESlhlQXF1WnRxYnpqMyIsImV4cCI6MTc2ODI4ODU5NCwianRpIjoiY2FjMjNkZmUzNzJiNDFkMjQ4NWU2NTFkNGI5MzhhMDlhNjRhOWNkYWViMzU4MDliN2Y0NGQ0ODBhMjA3YjBhOCIsIkFkZHJlc3MiOiIweDIxYjEyNDdDMEU3ODIyYTlhMTQyNzE4OTYyMDE1ZkFmMmZGNzljNmYiLCJBZGRyZXNzVHlwZSI6MSwiQWNjb3VudFVzZXJuYW1lIjoiIn0.8Vdi_NSH2J7oEj7kiSknkj7gRF6TzhlPdcmF8vwqGyo"}',
+      value: '{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItMTEzMjkyNDcyMS4xNzY3Njg3MjcyIiwiR2FseGVJRCI6IjJBRnZ5amI3REpYZUFxdVp0cWJ6ajMiLCJleHAiOjE3NjgzODE2OTIsImp0aSI6IjA0YjE2NTVjOWExODI2YjI0N2UwN2NhYjIwNzYzMDRhNDU2Yzg5ZTg3ZmVkODk2NDNkN2Q0MTg3NDRmZGVlNjMiLCJBZGRyZXNzIjoiMHgyMWIxMjQ3QzBFNzgyMmE5YTE0MjcxODk2MjAxNWZBZjJmRjc5YzZmIiwiQWRkcmVzc1R5cGUiOjEsIkFjY291bnRVc2VybmFtZSI6IiJ9.2kVphLD27fMEkO4l_41K11fwIVw4k5qRq16NxywXLis"}',
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -80,23 +74,21 @@ test("check browser version", async ({ context, page, extensionId }) => {
     },
   ];
 
-  // Add the cookies to the browser context
-  await context.addCookies(cookies);
+}
 
-    // Now, navigate to a page within the domain where the cookies are set
+
+test("check browser version", async ({ context, page, extensionId }) => {
+  // Define the cookies to be set
+
+  // Add the cookies to the browser context
+  await context.addCookies(getCookies());
+
+  // Now, navigate to a page within the domain where the cookies are set
   // const page = await context.newPage();
-  await page.goto('https://dashboard.galxe.com');// test
+  await page.goto('https://app.galxe.com');// test
 
   await delay(3000)
 
   await page.screenshot({ path: 'test-results/screenshot5.png', fullPage: true });
 
-
-  // 确认完到登录成功有延迟
-  // await page.locator('.e2e-avatar').click()
-  // await delay(3000)
-  // await page.screenshot({ 
-  //   path: 'test-results/mock-login.png',
-  //   fullPage: true 
-  // });
 });

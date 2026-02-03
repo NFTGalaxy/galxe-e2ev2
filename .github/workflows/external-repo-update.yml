@@ -14,27 +14,32 @@ jobs:
     steps:
       # 1. 检出当前仓库代码
       - name: Checkout repository
+        id: checkout
         uses: actions/checkout@v4
 
       # 2. 设置 Node.js 版本，并启用 pnpm 缓存
       - name: Setup Node.js
+        id: setup-node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
       # 3. 安装 pnpm（避免 "Unable to locate executable file: pnpm" 错误）
       - name: Install pnpm
+        id: install-pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.13.1
 
       # 4. 安装依赖
       - name: Install dependencies
+        id: install-deps
         run: pnpm install
 
       # 5. 安装 X Server (xvfb) - 用于支持 headed 模式的浏览器（如果需要）
       # 注意：如果只使用 headless 模式，可以跳过此步骤
       - name: Install X Server (xvfb)
+        id: install-xvfb
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb
@@ -42,6 +47,7 @@ jobs:
 
       # 6. 启动 Test Dapp 服务器（后台运行）并等待就绪
       - name: Start Test Dapp server
+        id: start-test-dapp
         run: |
           # 启动服务器（后台运行）
           pnpm run serve:test-dapp &
@@ -72,21 +78,25 @@ jobs:
 
       # 7. 安装 Playwright 浏览器（包含系统依赖）
       - name: Install Playwright browsers
+        id: install-playwright
         run: pnpm exec playwright install
 
       # 8. 构建 wallet cache（headless 模式）
       - name: Build wallet cache (headless)
+        id: build-cache
         run: pnpm run build:cache:headless
 
       # 9. 运行 Playwright 测试（headless 模式）
       # 如果需要在 headed 模式下运行，可以使用 xvfb-run 包装命令：
       # run: xvfb-run -a pnpm run test:playwright:headful
       - name: Run Playwright tests (headless)
+        id: run-playwright-tests
         run: pnpm run test:playwright:headless
         continue-on-error: true # 即使测试失败也继续执行，以便上传截图和视频
 
       # 10. 停止 Test Dapp 服务器（清理）
       - name: Stop Test Dapp server
+        id: stop-test-dapp
         if: always()
         run: |
           if [ ! -z "$SERVER_PID" ]; then
@@ -108,3 +118,47 @@ jobs:
             playwright-report/
           retention-days: 3 # 保留 30 天
           if-no-files-found: ignore # 如果没有文件也不报错
+
+      # 12. 通知 Slack（始终发送，便于及时同步结果）
+      - name: Notify Slack about E2E trigger result
+        # 汇总前序步骤状态，便于定位失败原因
+        if: always()
+        # Use the same webhook pattern as the existing Slack workflow.
+        uses: slackapi/slack-github-action@v1.27.1
+        with:
+          payload: |
+            {
+              "text": "E2E Trigger Notification",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*E2E trigger finished for `${{ github.ref_name }}`*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Overall:* ${{ job.status == 'success' && '✅ success' || '❌ failure' }}\n"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Run"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

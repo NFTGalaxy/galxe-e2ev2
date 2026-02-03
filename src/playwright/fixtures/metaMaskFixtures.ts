@@ -54,7 +54,6 @@ export const metaMaskFixtures = (walletSetup: ReturnType<typeof defineWalletSetu
 
       const metamaskPath = await prepareExtension()
 
-      console.log('metamaskPath-----', metamaskPath)
 
       // We don't need the `--load-extension` arg since the extension is already loaded in the cache.
       const browserArgs = [`--disable-extensions-except=${metamaskPath}`]
