@@ -26,6 +26,19 @@
   - `app-login.spec.ts`
   - `app-mock-login.spec.ts`
 
+### E2E 测试用例
+
+**当用户说"创建一个完整的测试用例"时：**
+
+- **文件位置**：`test/playwright/e2e/`
+- **文件命名**：使用 kebab-case，以 `.spec.ts` 结尾
+- **测试类型**：端到端 (End-to-End) 完整流程测试
+- **特点**：包含完整的用户操作流程，从登录到最终验证
+- **示例**：
+  - `quest-e2e-complete-flow.spec.ts`
+  - `quest-e2e-custom-visit.spec.ts`
+  - `quest-e2e-multi-reward.spec.ts`
+
 ## 测试文件模板
 
 ### Dashboard 测试文件模板
@@ -53,23 +66,23 @@ test('测试用例描述', async ({ context, page, extensionId }) => {
   const testPage = await handleLogin(domain, context, page, extensionId)
   await testPage.goto(`${domain}/quest/create?space=192`)
   await delay(3000)
-  
+
   // 2. Step 1: 设置基本信息
   await setStep1(testPage)
   await delay(3000)
-  
+
   // 3. 进入下一步
   await nextStep(testPage)
-  
+
   // 4. Step 2: 设置奖励类型
   await setRewardTypeOatUseTemplateBnbChainMintingCap12(testPage)
-  
+
   // 5. 进入下一步（如果需要）
   await nextStep(testPage)
-  
+
   // 6. Step 3: 设置任务/凭证
   await createXFollowedByCredential(testPage)
-  
+
   // 7. 截图（可选）
   await testPage.screenshot({ path: 'test-results/test-result.png', fullPage: true });
 })
@@ -89,10 +102,76 @@ const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 test('测试用例描述', async ({ context, page, extensionId }) => {
   const testPage = await handleLogin('https://app.galxe.com', context, page, extensionId)
-  
+
   // 测试步骤
   await delay(3000)
   // ... 其他测试代码
+})
+```
+
+### E2E 测试文件模板
+
+**完整流程测试模板（包含创建、发布、验证三个阶段）：**
+
+```typescript
+import { testWithSynpress } from '@synthetixio/synpress-core'
+import { metaMaskFixtures } from '../../../src/playwright'
+import basicSetup from '../wallet-setup/basic.setup'
+import { handleLogin } from '../util';
+import { delay, nextStep, release } from '../utils/actions';
+// Step 1: 基本信息设置
+import { setStep1 } from '../utils/step1';
+// Step 2: 奖励设置（根据测试需求选择）
+import { setRewardTypeOatUseTemplateBnbChainMintingCap12 } from '../utils/step2';
+// Step 3: 任务/凭证设置（根据测试需求选择）
+import { createXFollowedByCredential } from '../utils/step3';
+// 验证工具
+import { verifyQuestReleased, verifyTaskCompletion } from '../utils/verify';
+
+const test = testWithSynpress(metaMaskFixtures(basicSetup))
+
+const domain = "https://galxe-web-dashboard-git-feat-likaiagent-e2e-galxe.vercel.app"
+// const appDomain = "https://app.galxe.com"
+
+test('E2E 完整流程测试', async ({ context, page, extensionId }) => {
+  // ========== 阶段 1: Quest 创建 ==========
+  console.log('开始 Quest 创建流程...')
+
+  // 1. 登录 Dashboard 并创建 Quest
+  const testPage = await handleLogin(domain, context, page, extensionId)
+  await testPage.goto(`${domain}/quest/create?space=192`)
+  await delay(3000)
+
+  // 2. Step 1: 设置基本信息
+  await setStep1(testPage)
+  await delay(3000)
+
+  // 3. 进入下一步
+  await nextStep(testPage)
+
+  // 4. Step 2: 设置奖励类型
+  await setRewardTypeOatUseTemplateBnbChainMintingCap12(testPage)
+
+  // 5. 进入下一步
+  await nextStep(testPage)
+
+  // 6. Step 3: 设置任务/凭证
+  await createXFollowedByCredential(testPage)
+
+  // 7. 发布 Quest
+  const questUrl = await release(testPage);
+
+  console.log('questUrl', questUrl);
+
+
+  // 8. 验证 Quest 已发布
+  const appTestPage = await handleLogin(questUrl, context, testPage, extensionId)
+  await verifyFollowSpace(appTestPage, questId)
+
+  // 9. 最终截图
+  await testPage.screenshot({ path: 'test-results/e2e-complete-flow.png', fullPage: true });
+
+  console.log('E2E 完整流程测试完成!')
 })
 ```
 
@@ -281,25 +360,25 @@ const domain = "https://galxe-web-dashboard-git-feat-likaiagent-e2e-galxe.vercel
 test('OAT reward with X Followed By', async ({ context, page, extensionId }) => {
   const testPage = await handleLogin(domain, context, page, extensionId)
   await testPage.goto(`${domain}/quest/create?space=192`)
-  
+
   await delay(3000)
-  
+
   // Step 1: 设置基本信息
   await setStep1(testPage)
   await delay(3000)
-  
+
   // 进入下一步
   await nextStep(testPage)
-  
+
   // Step 2: 设置奖励类型
   await setRewardTypeOatUseTemplateBnbChainMintingCap12(testPage)
-  
+
   // 进入下一步
   await nextStep(testPage)
-  
+
   // Step 3: 设置任务/凭证
   await createXFollowedByCredential(testPage)
-  
+
   await testPage.screenshot({ path: 'test-results/result.png', fullPage: true });
 })
 ```
@@ -313,6 +392,31 @@ test('OAT reward with X Followed By', async ({ context, page, extensionId }) => 
 2. 文件名：`user-login.spec.ts`（或根据具体功能命名）
 3. 使用 App 测试文件模板
 4. 编写测试逻辑
+
+## 示例：创建新的 E2E 测试
+
+**当用户说："创建一个完整的测试用例"时：**
+
+应该：
+1. 在 `test/playwright/e2e/` 目录下创建新文件
+2. 文件名：使用描述性的 kebab-case，如：
+   - `quest-e2e-complete-flow.spec.ts`
+   - `quest-e2e-custom-visit.spec.ts`
+   - `quest-e2e-multi-reward.spec.ts`
+3. 使用 E2E 测试文件模板
+4. **包含完整的三个阶段**：
+   - 阶段 1：Quest 创建（Dashboard 端）
+   - 阶段 2：Quest 发布验证
+   - 阶段 3：App 端参与验证（可选）
+5. 使用验证工具函数确保流程完整性
+6. 添加适当的日志输出和截图
+
+### E2E 测试特点
+
+- **完整性**：覆盖从创建到验证的完整用户流程
+- **跨平台**：可能涉及 Dashboard 和 App 两个平台
+- **验证导向**：重点验证整个流程的正确性
+- **文档化**：包含详细的日志和截图，便于调试
 
 ## 可用的工具函数参考
 
@@ -344,5 +448,6 @@ test('OAT reward with X Followed By', async ({ context, page, extensionId }) => 
 
 ## 更新日志
 
+- 2026-02-05: 添加 E2E 测试用例规则，当用户说"创建一个完整的测试用例"时，将文件放置到 `test/playwright/e2e/` 目录下，并提供完整的 E2E 测试文件模板和示例
 - 2024-XX-XX: 添加三步骤结构说明，明确测试用例必须从 step1.ts、step2.ts、step3.ts 分别导入函数并组合使用
 - 2024-XX-XX: 初始版本，定义测试用例创建规则

@@ -19,7 +19,10 @@
     "test:cypress:headful": "cypress run --browser chrome --headed",
     "test:playwright:headful": "playwright test",
     "test:playwright:headless": "HEADLESS=true playwright test",
-    "test:playwright:headless:ui": "HEADLESS=true playwright test --ui"
+    "test:playwright:headless:ui": "HEADLESS=true playwright test --ui",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:changed": "prettier --write $(git diff --name-only --diff-filter=ACMR | grep -E '\\.(js|jsx|ts|tsx|json|md)$')"
   },
   "dependencies": {
     "@playwright/test": "1.48.2",

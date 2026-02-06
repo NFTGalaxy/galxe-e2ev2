@@ -1,46 +1,47 @@
 import type { Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 
 export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
+export const appDomain =
+  'https://galxe-web-git-feat-likaiagent-e2e-galxe.vercel.app';
+export const dashboardDomain =
+  'https://galxe-web-dashboard-git-feat-likaiagent-e2e-galxe.vercel.app';
 
 // Release quest
 export const release = async (page: Page) => {
   // 点击 Release 按钮
-  await page.getByRole('button', { name: 'Release' }).click()
+  const releaseButton = await page.getByRole('button', { name: 'Release' });
+
+  expect(releaseButton).toBeVisible({ timeout: 5000 });
+
+  await releaseButton.click();
 
   // 等待1秒，确保页面元素加载完成
-  await delay(1000)
-
-  // 查找 "Ignore and Release" 按钮
-  const ignoreAndReleaseButton = page.getByRole('button', { name: 'Ignore and Release' })
-
-  // 使用 count() 方法判断按钮是否存在（更可靠的方式）
-  // count() 返回匹配的元素数量，如果为 0 则表示不存在
-  const buttonCount = await ignoreAndReleaseButton.count()
-
-  // 如果 "Ignore and Release" 按钮存在（count > 0），先点击它
-  if (buttonCount > 0) {
-    console.log('找到 "Ignore and Release" 按钮，正在点击...')
-    await ignoreAndReleaseButton.click()
-    await delay(2000) // 等待按钮点击后的响应
-  } else {
-    console.log('未找到 "Ignore and Release" 按钮，直接点击 "Release Now"')
-  }
+  await delay(1000);
 
   // 点击 "Release Now" 按钮
-  await page.getByRole('button', { name: 'Release Now' }).click()
+  await page.getByRole('button', { name: 'Release Now' }).click();
 
   // 等待发布完成
-  await delay(10000)
-}
+  await delay(15000);
+
+  await page.screenshot({
+    path: 'test-results/quest-released.png',
+    fullPage: true,
+  });
+
+  let url = await page.url();
+
+  if (url.includes(dashboardDomain)) {
+    await delay(5000);
+    url = await page.url();
+  }
+
+  return url.replace('https://app.stg.galxe.com', appDomain);
+};
 
 export const nextStep = async (page: Page) => {
-  await page.getByText('Next Step').click()
-  await delay(1000)
-}
-
-
-
-
-
-
+  await page.getByText('Next Step').click();
+  await delay(1000);
+};

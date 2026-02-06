@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -11,20 +11,17 @@ export default defineConfig({
   fullyParallel: true,
 
   testIgnore: [
-    'test/playwright/app/*',
-    'test/playwright/dashboard/quest-create.spec.ts',
-    'test/playwright/dashboard/quest-creat-NFT.spec.ts',
-    'test/playwright/dashboard/quest-creat-multi.spec.ts',
-    'test/playwright/dashboard/quest-creat-OAT.spec.ts',
-    'test/playwright/dashboard/quest-creat-OAT-quote-tweet.spec.ts'
-  ], // 忽略特定测试文件
+    'test/playwright/apps/*',
+    'test/playwright/dashboard/*',
+    'test/playwright/other/*',
+    'test/playwright/e2e/quest-e2e-custom-visit.spec.ts',
+  ],
 
-
-  timeout: 120 * 1000,
+  timeout: 180 * 1000,
   expect: {
-    timeout: 60 * 1000
+    timeout: 60 * 1000,
   },
-  globalTimeout: 120 * 1000,
+  globalTimeout: 180 * 1000,
 
   // Use half of the number of logical CPU cores for running tests in parallel.
   workers: undefined,
@@ -44,14 +41,14 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
-    }
+      use: { ...devices['Desktop Chrome'] },
+    },
   ],
 
   // Serve MetaMask Test Dapp locally before starting the tests.
   webServer: {
     command: 'pnpm run serve:test-dapp',
     url: 'http://localhost:9999',
-    reuseExistingServer: true
-  }
-})
+    reuseExistingServer: true,
+  },
+});

@@ -1,0 +1,49 @@
+# 依赖包
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# 构建输出
+dist/
+build/
+.next/
+.nuxt/
+.output/
+
+# 测试结果和报告
+test-results/
+test-reports/
+coverage/
+playwright-report/
+.nyc_output/
+
+# 日志文件
+*.log
+logs/
+
+# 环境配置
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 缓存
+.cache/
+.temp/
+.tmp/
+
+# 编辑器和IDE
+.vscode/
+.idea/
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 其他
+*.min.js
+*.min.css
+public/assets/
+assets/generated/

@@ -6,13 +6,9 @@ import basicSetup from '../wallet-setup/basic.setup';
 // Step 1: 基本信息设置
 import { setStep1 } from '../utils/step1';
 // Step 2: 奖励设置 - NFT
-import { setRewardTypeNftUploadMediaNameContractCap12 } from '../utils/step2';
+import { setupCustomReward } from '../utils/step2';
 // Step 3: 任务/凭证设置
-import {
-  createXQuoteTweetCredential,
-  selectVerifyBeforeTasks,
-  setMultiCredential,
-} from '../utils/step3';
+import { createVisitAPageCredential } from '../utils/step3';
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
@@ -31,7 +27,7 @@ const domain =
  *    - 设置 X Quote Tweet 凭证
  *    - 设置多维 cred
  */
-test('NFT reward with X Quote Tweet credential and multi dimension credential, verify before tasks enabled', async ({
+test('Custom reward with visit page credential', async ({
   context,
   page,
   extensionId,
@@ -51,59 +47,24 @@ test('NFT reward with X Quote Tweet credential and multi dimension credential, v
     fullPage: true,
   });
 
-  console.log(
-    '-------------------------------- Step 1 completed --------------------------------'
-  );
+  console.log('-------------------- Step 1 completed ------------------------');
 
   // 3. 进入下一步（奖励设置页面）
   await nextStep(testPage);
 
   // 4. Step 2: 设置 NFT 奖励类型
-  await setRewardTypeNftUploadMediaNameContractCap12(testPage);
+  await setupCustomReward(testPage);
   await testPage.screenshot({
     path: 'test-results/nft-quote-tweet-multi-step2.png',
     fullPage: true,
   });
 
-  console.log(
-    '-------------------------------- Step 2 completed --------------------------------'
-  );
+  console.log('--------------------- Step 2 completed -----------------');
 
   // 5. 进入下一步（任务设置页面）
   await nextStep(testPage);
 
-  // 6. Step 3: 设置任务和凭证
-  // 6.1 首先打开 verifyBeforeTasks
-  await selectVerifyBeforeTasks(testPage);
-  console.log(
-    '-------------------------------- Verify Before Tasks enabled --------------------------------'
-  );
-
   // 6.2 设置 X Quote Tweet 凭证
-  await createXQuoteTweetCredential(testPage);
-  console.log(
-    '-------------------------------- X Quote Tweet credential created --------------------------------'
-  );
-
-  // 6.3 设置多维 cred
-  await setMultiCredential(testPage);
-  console.log(
-    '-------------------------------- Multi dimension credential set --------------------------------'
-  );
-
-  await delay(2000);
-  await testPage.screenshot({
-    path: 'test-results/nft-quote-tweet-multi-step3.png',
-    fullPage: true,
-  });
-
-  console.log(
-    '-------------------------------- Step 3 completed --------------------------------'
-  );
-
-  // 7. 最终截图
-  await testPage.screenshot({
-    path: 'test-results/nft-quote-tweet-multi-final.png',
-    fullPage: true,
-  });
+  await createVisitAPageCredential(testPage);
+  console.log('--------------- Visit page credential created ---------------');
 });

@@ -22,7 +22,7 @@ jobs:
         id: setup-node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
       # 3. 安装 pnpm（避免 "Unable to locate executable file: pnpm" 错误）
       - name: Install pnpm
@@ -141,7 +141,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Overall:* ${{ job.status == 'success' && '✅ success' || '❌ failure' }}\n"
+                    "text": "*Overall:* ${{ job.status == 'success' && '✅ success' || '❌ failure' }}\n*Workflow:* ${{ github.workflow }}\n*Upstream payload:* ${{ toJson(github.event.client_payload) }}\n*Steps:*\n• Checkout: ${{ steps.checkout.outcome }}\n• Setup Node: ${{ steps.setup-node.outcome }}\n• Install pnpm: ${{ steps.install-pnpm.outcome }}\n• Install deps: ${{ steps.install-deps.outcome }}\n• Install xvfb: ${{ steps.install-xvfb.outcome }}\n• Start Test Dapp: ${{ steps.start-test-dapp.outcome }}\n• Install Playwright: ${{ steps.install-playwright.outcome }}\n• Build cache: ${{ steps.build-cache.outcome }}\n• Playwright tests: ${{ steps.run-playwright-tests.outcome }}\n• Stop Test Dapp: ${{ steps.stop-test-dapp.outcome }}\n• Upload results: ${{ steps.upload-artifact.outcome }}"
                   }
                 },
                 {
@@ -160,5 +160,5 @@ jobs:
               ]
             }
         env:
-          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
+          SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
