@@ -210,12 +210,13 @@ export class MetaMask extends MetaMaskAbstract {
    *
    * @throws {Error} If extensionId is not set.
    */
-  async confirmSignature(): Promise<void> {
+  async confirmSignature(): Promise<Page> {
     if (!this.extensionId) {
       throw NO_EXTENSION_ID_ERROR;
     }
 
-    await this.notificationPage.signMessage(this.extensionId);
+    const page = await this.notificationPage.signMessage(this.extensionId);
+    return page;
   }
 
   /**

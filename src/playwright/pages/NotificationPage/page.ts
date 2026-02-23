@@ -67,6 +67,7 @@ export class NotificationPage {
     } else {
       await signSimpleMessage.sign(notificationPage);
     }
+    return await this.page.context().newPage();
   }
 
   async signMessageWithRisk(extensionId: string) {
