@@ -60,6 +60,10 @@ export class NotificationPage {
       page.url().includes(`notification.html#confirm-transaction`)
     );
 
+    const homePage = currentPages.find(page =>
+      page.url().includes(`galxe.com`)
+    );
+
     if (!notificationPage) {
       throw new Error('Notification page not found');
     }
@@ -74,7 +78,7 @@ export class NotificationPage {
       await scrollButton.waitFor({ state: 'visible' });
       isScrollButtonVisible = true;
     }
-    this.page.screenshot({
+    homePage?.screenshot({
       path: 'test-results/notification-page-before-message-signature.png',
       fullPage: true,
     });
