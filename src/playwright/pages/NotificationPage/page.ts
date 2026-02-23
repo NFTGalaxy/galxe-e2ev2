@@ -65,14 +65,14 @@ export class NotificationPage {
       page.url().includes(`notification.html#confirm-transaction`)
     );
 
-    notificationPage?.screenshot({
-      path: 'test-results/notification-page-before-message-signature333.png',
-      fullPage: true,
-    });
+    // notificationPage?.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature333.png',
+    //   fullPage: true,
+    // });
 
-    const homePage = currentPages.find(page =>
-      page.url().includes(`galxe.com`)
-    );
+    // const homePage = currentPages.find(page =>
+    //   page.url().includes(`galxe.com`)
+    // );
 
     if (!notificationPage) {
       throw new Error('Notification page not found');
@@ -88,10 +88,10 @@ export class NotificationPage {
       await scrollButton.waitFor({ state: 'visible' });
       isScrollButtonVisible = true;
     }
-    homePage?.screenshot({
-      path: 'test-results/notification-page-before-message-signature.png',
-      fullPage: true,
-    });
+    // homePage?.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature.png',
+    //   fullPage: true,
+    // });
 
     return {
       notificationPage,
@@ -109,6 +109,13 @@ export class NotificationPage {
       console.log('not visible scroll button');
       await signSimpleMessage.sign(notificationPage);
     }
+    await delay(3000);
+    notificationPage.goto('https://app.galxe.com');
+    await delay(3000);
+    notificationPage.screenshot({
+      path: 'test-results/notification-page-before-message-signature444.png',
+      fullPage: true,
+    });
     return await this.page.context().newPage();
   }
 

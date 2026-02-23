@@ -24,7 +24,10 @@ export async function getNotificationPageAndWaitForLoad(
       // Check if notification page is already open
       notificationPage = context.pages().find(isNotificationPage);
 
-      // console.log('context.pages()', context.pages().map(page => page.url()))
+      console.log(
+        'context.pages()',
+        context.pages().map(page => page.url())
+      );
 
       if (!notificationPage) {
         console.log('notificationPage not found');
