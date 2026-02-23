@@ -15,7 +15,20 @@ test('app login', async ({ context, page, extensionId }) => {
     extensionId
   );
 
-  await delay(3000);
+  // CI may recreate/close the original tab during wallet-connect callbacks.
+  // Always re-resolve the current Galxe page from the context before interacting.
+  const activeGalxePage =
+    context
+      .pages()
+      .find(
+        contextPage =>
+          !contextPage.isClosed() && contextPage.url().includes('app.galxe.com')
+      ) ?? testPage;
+
+  await activeGalxePage
+    .locator('.e2e-avatar')
+    .first()
+    .waitFor({ state: 'visible', timeout: 20_000 });
 
   // console.log(
   //   'pages111',
@@ -31,7 +44,7 @@ test('app login', async ({ context, page, extensionId }) => {
   // });
 
   // 确认完到登录成功有延迟
-  await testPage.locator('.e2e-avatar').click();
+  await activeGalxePage.locator('.e2e-avatar').first().click();
   await delay(3000);
   // await testPage.screenshot({
   //   path: 'test-results/user-home.png',
