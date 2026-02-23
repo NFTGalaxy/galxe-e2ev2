@@ -41,6 +41,8 @@ export const handleLogin = async (
   console.log('confirmSignature success');
   await delay(3000);
 
+  await page.goto(url); // test
+
   await page.screenshot({
     path: 'test-results/mm-login222.png',
     fullPage: true,
