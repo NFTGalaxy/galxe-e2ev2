@@ -50,10 +50,19 @@ export class NotificationPage {
       currentPages.map(page => page.url())
     );
 
-    const notificationPage = await getNotificationPageAndWaitForLoad(
-      this.page.context(),
-      extensionId
+    //  个人魔改版本
+    // const notificationPage = await getNotificationPageAndWaitForLoad(
+    //   this.page.context(),
+    //   extensionId
+    // );
+
+    const notificationPage = currentPages.find(page =>
+      page.url().includes(`notification.html#confirm-transaction`)
     );
+
+    if (!notificationPage) {
+      throw new Error('Notification page not found');
+    }
 
     const scrollButton = notificationPage.locator(
       Selectors.SignaturePage.structuredMessage.scrollDownButton
