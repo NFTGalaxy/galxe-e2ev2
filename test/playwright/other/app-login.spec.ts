@@ -14,7 +14,11 @@ test('app login', async ({ context, page, extensionId }) => {
     page,
     extensionId
   );
-  await testPage.screenshot({
+
+  await delay(3000);
+  await page.goto('https://app.galxe.com');
+
+  await page.screenshot({
     path: 'test-results/mm-login.png',
     fullPage: true,
   });
