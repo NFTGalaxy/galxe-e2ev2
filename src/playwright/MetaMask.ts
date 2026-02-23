@@ -193,6 +193,7 @@ export class MetaMask extends MetaMaskAbstract {
       this.extensionId,
       accounts
     );
+    await delay(3000);
     this.page.screenshot({
       path: 'test-results/mm-login-sign555.png',
       fullPage: true,
@@ -223,6 +224,11 @@ export class MetaMask extends MetaMaskAbstract {
     if (!this.extensionId) {
       throw NO_EXTENSION_ID_ERROR;
     }
+
+    await this.notificationPage.page.screenshot({
+      path: 'test-results/mm-login-sign3313.png',
+      fullPage: true,
+    });
 
     const page = await this.notificationPage.signMessage(this.extensionId);
 
