@@ -184,11 +184,19 @@ export class MetaMask extends MetaMaskAbstract {
     if (!this.extensionId) {
       throw NO_EXTENSION_ID_ERROR;
     }
+    this.page.screenshot({
+      path: 'test-results/mm-login-sign444.png',
+      fullPage: true,
+    });
 
     const page = await this.notificationPage.connectToDapp(
       this.extensionId,
       accounts
     );
+    this.page.screenshot({
+      path: 'test-results/mm-login-sign555.png',
+      fullPage: true,
+    });
     return page;
   }
 
@@ -219,7 +227,7 @@ export class MetaMask extends MetaMaskAbstract {
     const page = await this.notificationPage.signMessage(this.extensionId);
 
     await delay(3000);
-    await this.page.screenshot({
+    await this.notificationPage.page.screenshot({
       path: 'test-results/mm-login-sign333.png',
       fullPage: true,
     });
