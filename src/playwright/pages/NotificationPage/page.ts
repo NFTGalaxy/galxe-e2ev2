@@ -37,6 +37,11 @@ export class NotificationPage {
 
   // TODO: Revisit this logic in the future to see if we can increase the performance by utilizing `Promise.race`.
   private async beforeMessageSignature(extensionId: string) {
+    this.page.screenshot({
+      path: 'test-results/notification-page-before-message-signature111.png',
+      fullPage: true,
+    });
+
     const notificationPage = await getNotificationPageAndWaitForLoad(
       this.page.context(),
       extensionId
