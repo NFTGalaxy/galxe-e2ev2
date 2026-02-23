@@ -31,13 +31,13 @@ export const handleLogin = async (
   console.log('click metamask btn success');
   await delay(3000);
 
-  await metamask.connectToDapp();
+  const newPage = await metamask.connectToDapp();
 
   // connectToDapp 关闭 notification 弹窗后，将焦点切回 dapp 页面
   await page.bringToFront();
   await delay(1000);
 
-  await page.screenshot({
+  await newPage.screenshot({
     path: 'test-results/mm-login-sign222.png',
     fullPage: true,
   });
@@ -51,7 +51,7 @@ export const handleLogin = async (
   await page.bringToFront();
   await delay(3000);
 
-  await page.screenshot({
+  await newPage.screenshot({
     path: 'test-results/mm-login-sign333.png',
     fullPage: true,
   });

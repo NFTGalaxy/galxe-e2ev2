@@ -179,12 +179,16 @@ export class MetaMask extends MetaMaskAbstract {
    * @param accounts - Optional array of account addresses to connect.
    * @throws {Error} If extensionId is not set.
    */
-  async connectToDapp(accounts?: string[]): Promise<void> {
+  async connectToDapp(accounts?: string[]): Promise<Page> {
     if (!this.extensionId) {
       throw NO_EXTENSION_ID_ERROR;
     }
 
-    await this.notificationPage.connectToDapp(this.extensionId, accounts);
+    const page = await this.notificationPage.connectToDapp(
+      this.extensionId,
+      accounts
+    );
+    return page;
   }
 
   /**
