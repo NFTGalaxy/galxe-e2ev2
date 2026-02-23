@@ -50,6 +50,11 @@ export class NotificationPage {
       currentPages.map(page => page.url())
     );
 
+    this.page.screenshot({
+      path: 'test-results/notification-page-before-message-signature222.png',
+      fullPage: true,
+    });
+
     //  个人魔改版本
     // const notificationPage = await getNotificationPageAndWaitForLoad(
     //   this.page.context(),
@@ -93,8 +98,10 @@ export class NotificationPage {
     const { notificationPage, isScrollButtonVisible } =
       await this.beforeMessageSignature(extensionId);
     if (isScrollButtonVisible) {
+      console.log('visible scroll button');
       await signStructuredMessage.sign(notificationPage);
     } else {
+      console.log('not visible scroll button');
       await signSimpleMessage.sign(notificationPage);
     }
     return await this.page.context().newPage();
