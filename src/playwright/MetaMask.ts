@@ -1,4 +1,5 @@
 import type { BrowserContext, Page } from '@playwright/test';
+import { delay } from '../../test/playwright/utils/actions';
 import { SettingsSidebarMenus } from '../selectors/pages/HomePage/settings';
 import type { GasSettings } from '../type/GasSettings';
 import { MetaMaskAbstract } from '../type/MetaMaskAbstract';
@@ -216,6 +217,12 @@ export class MetaMask extends MetaMaskAbstract {
     }
 
     const page = await this.notificationPage.signMessage(this.extensionId);
+
+    await delay(3000);
+    await this.page.screenshot({
+      path: 'test-results/mm-login-sign333.png',
+      fullPage: true,
+    });
     return page;
   }
 
