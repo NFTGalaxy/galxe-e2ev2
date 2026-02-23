@@ -15,24 +15,32 @@ test('app login', async ({ context, page, extensionId }) => {
     extensionId
   );
 
-  // CI may recreate/close the original tab during wallet-connect callbacks.
-  // Always re-resolve the current Galxe page from the context before interacting.
-  let activeGalxePage = context.pages().find(
-    contextPage =>
-      !contextPage.isClosed() && contextPage.url().includes('app.galxe.com')
-  );
-
-  // In CI the original page can be fully closed after extension popups finish.
-  // Re-open the dapp page in the same context so session/cookies are preserved.
-  if (!activeGalxePage || activeGalxePage.isClosed()) {
-    activeGalxePage = !testPage.isClosed() ? testPage : await context.newPage();
-    if (activeGalxePage.url() === 'about:blank' || activeGalxePage.isClosed()) {
-      activeGalxePage = await context.newPage();
+  // Never create a brand-new page here: some login state is tab-flow dependent in CI.
+  // Instead, keep polling existing context pages and reuse the live Galxe tab only.
+  let activeGalxePage = !testPage.isClosed() ? testPage : undefined;
+  for (let attempt = 0; attempt < 60; attempt++) {
+    const candidate = context
+      .pages()
+      .find(
+        contextPage =>
+          !contextPage.isClosed() && contextPage.url().includes('app.galxe.com')
+      );
+    if (candidate) {
+      activeGalxePage = candidate;
+      break;
     }
-    await activeGalxePage.goto('https://app.galxe.com', {
-      waitUntil: 'domcontentloaded',
-    });
+    await delay(500);
   }
+
+  if (!activeGalxePage || activeGalxePage.isClosed()) {
+    const pageUrls = context.pages().map(contextPage => contextPage.url());
+    throw new Error(
+      `No active Galxe page after login flow: ${pageUrls.join(', ')}`
+    );
+  }
+
+  await activeGalxePage.bringToFront();
+  await activeGalxePage.waitForLoadState('domcontentloaded');
 
   await activeGalxePage
     .locator('.e2e-avatar')
