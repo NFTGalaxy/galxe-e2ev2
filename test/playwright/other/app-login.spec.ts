@@ -25,16 +25,16 @@ test('app login', async ({ context, page, extensionId }) => {
   // const newPage = await context.newPage();
   // await newPage.goto('https://app.galxe.com');
 
-  await page.screenshot({
-    path: 'test-results/mm-login.png',
-    fullPage: true,
-  });
+  // await page.screenshot({
+  //   path: 'test-results/mm-login.png',
+  //   fullPage: true,
+  // });
 
   // 确认完到登录成功有延迟
   await testPage.locator('.e2e-avatar').click();
   await delay(3000);
-  await testPage.screenshot({
-    path: 'test-results/user-home.png',
-    fullPage: true,
-  });
+  // await testPage.screenshot({
+  //   path: 'test-results/user-home.png',
+  //   fullPage: true,
+  // });
 });

@@ -1,5 +1,4 @@
 import type { BrowserContext, Page } from '@playwright/test';
-// import { cloneDeep } from 'lodash';
 import { MetaMask } from '../../src/playwright';
 import basicSetup from './wallet-setup/basic.setup';
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
@@ -10,7 +9,7 @@ export const handleLogin = async (
   page: Page,
   extensionId: string
 ) => {
-  // const initPage = cloneDeep(page);
+  const initPage = structuredClone(page);
   const metamask = new MetaMask(
     context,
     page,
