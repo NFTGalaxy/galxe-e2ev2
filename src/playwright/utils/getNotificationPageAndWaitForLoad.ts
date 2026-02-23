@@ -11,6 +11,7 @@ export async function getNotificationPageAndWaitForLoad(
   extensionId: string,
   maxRetries = 3
 ) {
+  console.log('call notification page');
   const notificationPageUrl = `chrome-extension://${extensionId}/notification.html`;
   const isNotificationPage = (page: Page) =>
     page.url().includes(notificationPageUrl);
@@ -26,6 +27,7 @@ export async function getNotificationPageAndWaitForLoad(
       // console.log('context.pages()', context.pages().map(page => page.url()))
 
       if (!notificationPage) {
+        console.log('notificationPage not found');
         // Wait for notification page to appear with timeout
         // notificationPage = await context.waitForEvent('page', {
         //   predicate: isNotificationPage,
