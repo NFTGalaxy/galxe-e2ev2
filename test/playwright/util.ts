@@ -35,15 +35,23 @@ export const handleLogin = async (
 
   await metamask.connectToDapp();
 
+  await page.screenshot({
+    path: 'test-results/mm-login-sign222.png',
+    fullPage: true,
+  });
+
   // 弹窗之间有延迟
   await delay(3000);
 
   await metamask.confirmSignature();
   await delay(3000);
+
+  await page.screenshot({
+    path: 'test-results/mm-login-sign333.png',
+    fullPage: true,
+  });
   console.log('confirmSignature success');
   await delay(3000);
-
-  console.log('page', page);
 
   return page;
 };
