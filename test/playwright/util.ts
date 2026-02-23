@@ -22,22 +22,17 @@ export const handleLogin = async (
   await page.locator('.e2e-login-btn').first().click();
   await delay(3000);
 
-  await page.screenshot({
-    path: 'test-results/mm-login-sign.png',
-    fullPage: true,
-  });
-
   await page.locator('.e2e-MetaMask').click();
   console.log('click metamask btn success');
   await delay(3000);
 
-  const newPage = await metamask.connectToDapp();
+  // const newPage = await metamask.connectToDapp();
 
   // connectToDapp 关闭 notification 弹窗后，将焦点切回 dapp 页面
   await page.bringToFront();
   await delay(1000);
 
-  await newPage.screenshot({
+  await page.screenshot({
     path: 'test-results/mm-login-sign222.png',
     fullPage: true,
   });
