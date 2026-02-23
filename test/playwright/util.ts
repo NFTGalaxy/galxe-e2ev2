@@ -9,7 +9,6 @@ export const handleLogin = async (
   page: Page,
   extensionId: string
 ) => {
-  const initPage = structuredClone(page);
   const metamask = new MetaMask(
     context,
     page,
