@@ -1,5 +1,4 @@
 import type { Page } from '@playwright/test';
-import { delay } from '../../../../test/playwright/utils/actions';
 import Selectors from '../../../selectors/pages/NotificationPage';
 import type { GasSettings } from '../../../type/GasSettings';
 import { getNotificationPageAndWaitForLoad } from '../../utils/getNotificationPageAndWaitForLoad';
@@ -38,12 +37,6 @@ export class NotificationPage {
 
   // TODO: Revisit this logic in the future to see if we can increase the performance by utilizing `Promise.race`.
   private async beforeMessageSignature(extensionId: string) {
-    this.page.screenshot({
-      path: 'test-results/notification-page-before-message-signature111.png',
-      fullPage: true,
-    });
-
-    await delay(3000);
     const currentPages = this.page.context().pages();
     console.log(
       'sign in pages url',
