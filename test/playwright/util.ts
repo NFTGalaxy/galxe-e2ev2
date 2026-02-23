@@ -54,5 +54,5 @@ export const handleLogin = async (
   console.log('confirmSignature success');
   await delay(3000);
 
-  return page;
+  return newPage;
 };
