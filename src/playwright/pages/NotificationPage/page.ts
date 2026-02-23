@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { delay } from '../../../../test/playwright/utils/actions';
 import Selectors from '../../../selectors/pages/NotificationPage';
 import type { GasSettings } from '../../../type/GasSettings';
 import { getNotificationPageAndWaitForLoad } from '../../utils/getNotificationPageAndWaitForLoad';
@@ -41,6 +42,13 @@ export class NotificationPage {
       path: 'test-results/notification-page-before-message-signature111.png',
       fullPage: true,
     });
+
+    await delay(3000);
+    const currentPages = this.page.context().pages();
+    console.log(
+      'sign in pages url',
+      currentPages.map(page => page.url())
+    );
 
     const notificationPage = await getNotificationPageAndWaitForLoad(
       this.page.context(),
