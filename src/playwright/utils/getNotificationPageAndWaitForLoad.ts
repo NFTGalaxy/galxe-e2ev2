@@ -41,6 +41,10 @@ export async function getNotificationPageAndWaitForLoad(
         // headless 模式 fallback：手动在新 tab 打开 notification.html
         notificationPage = await context.newPage();
         await notificationPage.goto(notificationPageUrl);
+        await notificationPage.screenshot({
+          path: 'test-results/notification-page.png',
+          fullPage: true,
+        });
         //   }
       }
 
