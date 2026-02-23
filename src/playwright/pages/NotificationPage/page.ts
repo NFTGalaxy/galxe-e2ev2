@@ -52,6 +52,10 @@ export class NotificationPage {
       await scrollButton.waitFor({ state: 'visible' });
       isScrollButtonVisible = true;
     }
+    this.page.screenshot({
+      path: 'test-results/notification-page-before-message-signature.png',
+      fullPage: true,
+    });
 
     return {
       notificationPage,
