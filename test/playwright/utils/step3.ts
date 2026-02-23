@@ -273,3 +273,73 @@ export async function setTwoTaskGroups(page: Page) {
     );
   }
 }
+
+export const createQuestCredential = async (page: Page) => {
+  await openCredentialSetup(page);
+
+  await page.getByTestId('Quiz').click();
+  // Fill Title
+  await page
+    .getByPlaceholder('Please input the Page name')
+    .fill('My Awesome Quiz');
+
+  // Fill Description (Markdown editor)
+  // Targeting the textarea inside the markdown editor
+  await page
+    .locator('.markdown-placeholder textarea')
+    .first()
+    .fill('Answer these questions to verify your knowledge.');
+
+  // --- Question 1 (Default is Multiple Choice) ---
+  const question1 = page.locator('.bg-component-textfield').nth(0);
+
+  // Fill Question Title
+  await question1
+    .getByPlaceholder('Question1 title')
+    .fill('What is the native token of Ethereum?');
+
+  // Option A
+  await question1.locator('input[value="Option A"]').fill('BTC');
+
+  // Option B
+  await question1.locator('input[value="Option B"]').fill('ETH');
+
+  // Mark Option B as correct
+  // We find the "Option B" input, then find the prefix node (the circle icon) to click
+  // The structure is TextField -> prefixNode -> div(onClick)
+  // We can target the container of the option which has the input with value "ETH"
+  // And then click the icon inside it.
+  await question1
+    .locator('div')
+    .filter({ has: page.locator('input[value="ETH"]') })
+    .locator('.cursor-pointer')
+    .first()
+    .click();
+
+  // Add a 3rd option
+  await question1.getByText('+ Add Option').click();
+  await question1.locator('input[value="Option C"]').fill('SOL');
+
+  // --- Add Question 2 (Short Answer) ---
+  await page.getByText('+Add').click();
+
+  const question2 = page.locator('.bg-component-textfield').nth(1);
+
+  // Fill Question Title
+  await question2
+    .getByPlaceholder('Question2 title')
+    .fill('What is the capital of France?');
+
+  // Change Type to Short Answer
+  // Click the Select trigger (combobox)
+  await question2.locator('.repo-select-trigger').click(); // Assuming class name or use role
+  // Since Select implementation might vary, try clicking the text "Multiple Choice" inside the second question
+  // await question2.getByText('Multiple Choice').click();
+  // Select "Short Answer" from dropdown
+  await page.getByText('Short Answer').click();
+
+  // Fill Answer
+  await question2.getByPlaceholder('Short answer text').fill('Paris');
+
+  await saveCredentialSetup(page);
+};

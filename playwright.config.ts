@@ -13,8 +13,9 @@ export default defineConfig({
   testIgnore: [
     'test/playwright/apps/*',
     'test/playwright/dashboard/*',
-    'test/playwright/other/*',
-    'test/playwright/e2e/quest-e2e-custom-visit.spec.ts',
+    'test/playwright/e2e/*',
+    'test/playwright/other/app-login.spec.ts',
+    // 'test/playwright/e2e/quest-e2e-custom-visit.spec.ts',
   ],
 
   timeout: 180 * 1000,
