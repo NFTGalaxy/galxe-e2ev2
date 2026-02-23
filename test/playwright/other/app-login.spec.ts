@@ -15,6 +15,11 @@ test('app login', async ({ context, page, extensionId }) => {
     extensionId
   );
 
+  console.log(
+    'current pages url',
+    context.pages().map(page => page.url())
+  );
+
   // Never create a brand-new page here: some login state is tab-flow dependent in CI.
   // Instead, keep polling existing context pages and reuse the live Galxe tab only.
   let activeGalxePage = !testPage.isClosed() ? testPage : undefined;
