@@ -28,8 +28,10 @@
     "@playwright/test": "1.48.2",
     "@synthetixio/synpress": "4.1.1",
     "@types/fs-extra": "^11.0.4",
+    "@types/lodash": "^4.17.24",
     "dotenv": "16.4.2",
     "esbuild": "^0.27.0",
+    "lodash": "^4.17.23",
     "tsup": "^8.5.1"
   },
   "devDependencies": {

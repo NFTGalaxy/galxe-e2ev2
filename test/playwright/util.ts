@@ -1,7 +1,7 @@
 import type { BrowserContext, Page } from '@playwright/test';
+// import { cloneDeep } from 'lodash';
 import { MetaMask } from '../../src/playwright';
 import basicSetup from './wallet-setup/basic.setup';
-
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export const handleLogin = async (
@@ -10,6 +10,7 @@ export const handleLogin = async (
   page: Page,
   extensionId: string
 ) => {
+  // const initPage = cloneDeep(page);
   const metamask = new MetaMask(
     context,
     page,
@@ -26,16 +27,7 @@ export const handleLogin = async (
   console.log('click metamask btn success');
   await delay(3000);
 
-  // const newPage = await metamask.connectToDapp();
-
-  // connectToDapp 关闭 notification 弹窗后，将焦点切回 dapp 页面
-  await page.bringToFront();
-  await delay(1000);
-
-  await page.screenshot({
-    path: 'test-results/mm-login-sign222.png',
-    fullPage: true,
-  });
+  await metamask.connectToDapp();
 
   // 弹窗之间有延迟
   await delay(3000);
@@ -49,5 +41,5 @@ export const handleLogin = async (
   console.log('confirmSignature success');
   await delay(3000);
 
-  return newPage;
+  return page;
 };

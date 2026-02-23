@@ -56,14 +56,14 @@ export class NotificationPage {
     // });
 
     //  个人魔改版本
-    // const notificationPage = await getNotificationPageAndWaitForLoad(
-    //   this.page.context(),
-    //   extensionId
-    // );
-
-    const notificationPage = currentPages.find(page =>
-      page.url().includes(`notification.html#confirm-transaction`)
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId
     );
+
+    // const notificationPage = currentPages.find(page =>
+    //   page.url().includes(`notification.html#confirm-transaction`)
+    // );
 
     // notificationPage?.screenshot({
     //   path: 'test-results/notification-page-before-message-signature333.png',
@@ -109,13 +109,13 @@ export class NotificationPage {
       console.log('not visible scroll button');
       await signSimpleMessage.sign(notificationPage);
     }
-    await delay(3000);
-    notificationPage.goto('https://app.galxe.com');
-    await delay(3000);
-    notificationPage.screenshot({
-      path: 'test-results/notification-page-before-message-signature444.png',
-      fullPage: true,
-    });
+    // await delay(3000);
+    // notificationPage.goto('https://app.galxe.com');
+    // await delay(3000);
+    // notificationPage.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature444.png',
+    //   fullPage: true,
+    // });
     return await this.page.context().newPage();
   }
 
