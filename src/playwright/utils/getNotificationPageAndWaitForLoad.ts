@@ -22,7 +22,9 @@ export async function getNotificationPageAndWaitForLoad(
   while (retries <= maxRetries) {
     try {
       // Check if notification page is already open
-      notificationPage = context.pages().find(isNotificationPage);
+      notificationPage = context.pages().find(
+        page => !page.isClosed() && isNotificationPage(page)
+      );
 
       console.log(
         'context.pages()',
@@ -31,29 +33,22 @@ export async function getNotificationPageAndWaitForLoad(
 
       if (!notificationPage) {
         console.log('notificationPage not found');
-        // Wait for notification page to appear with timeout
-        // notificationPage = await context.waitForEvent('page', {
-        //   predicate: isNotificationPage,
-        //   timeout: NOTIFICATION_PAGE_TIMEOUT
-        // })
-
-        // try {
-        //   notificationPage = await context.waitForEvent('page', {
-        //     predicate: isNotificationPage,
-        //     timeout: 3000,
-        //   });
-        // } catch {
-        // headless 模式 fallback：手动在新 tab 打开 notification.html
-        notificationPage = await context.newPage();
-        await notificationPage.goto(notificationPageUrl);
-        await notificationPage.screenshot({
-          path: 'test-results/notification-page.png',
-          fullPage: true,
+        // Wait for the real MetaMask popup page from browser events.
+        // Avoid creating a synthetic notification tab because it can lose
+        // the live approval/signature state required by the current flow.
+        notificationPage = await context.waitForEvent('page', {
+          predicate: page => !page.isClosed() && isNotificationPage(page),
+          timeout: NOTIFICATION_PAGE_TIMEOUT,
         });
-        //   }
       }
 
       console.log('notificationPage', notificationPage?.url());
+
+      if (notificationPage.isClosed()) {
+        throw new Error(
+          '[getNotificationPageAndWaitForLoad] Notification page was closed before interaction'
+        );
+      }
 
       // Ensure page is fully loadeds
       await waitUntilStable(notificationPage as Page);
