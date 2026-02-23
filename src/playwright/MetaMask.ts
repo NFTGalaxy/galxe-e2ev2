@@ -232,11 +232,11 @@ export class MetaMask extends MetaMaskAbstract {
 
     const page = await this.notificationPage.signMessage(this.extensionId);
 
-    await delay(3000);
-    await this.notificationPage.page.screenshot({
-      path: 'test-results/mm-login-sign333.png',
-      fullPage: true,
-    });
+    // await delay(3000);
+    // await this.notificationPage.page.screenshot({
+    //   path: 'test-results/mm-login-sign333.png',
+    //   fullPage: true,
+    // });
     return page;
   }
 
