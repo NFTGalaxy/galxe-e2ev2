@@ -44,7 +44,7 @@ export async function getNotificationPageAndWaitForLoad(
         //   }
       }
 
-      // console.log('notificationPage', notificationPage)
+      console.log('notificationPage', notificationPage);
 
       // Ensure page is fully loadeds
       await waitUntilStable(notificationPage as Page);
