@@ -45,12 +45,12 @@ export const handleLogin = async (
   // 弹窗之间有延迟
   await delay(3000);
 
-  const newPage2 = await metamask.confirmSignature();
+  await metamask.confirmSignature();
 
-  await newPage2.screenshot({
-    path: 'test-results/mm-login-sign333.png',
-    fullPage: true,
-  });
+  console.log(
+    'pages',
+    context.pages().map(page => page.url())
+  );
   console.log('confirmSignature success');
   await delay(3000);
 
