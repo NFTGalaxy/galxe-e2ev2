@@ -50,10 +50,10 @@ export class NotificationPage {
       currentPages.map(page => page.url())
     );
 
-    this.page.screenshot({
-      path: 'test-results/notification-page-before-message-signature222.png',
-      fullPage: true,
-    });
+    // this.page.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature222.png',
+    //   fullPage: true,
+    // });
 
     //  个人魔改版本
     // const notificationPage = await getNotificationPageAndWaitForLoad(
@@ -64,6 +64,11 @@ export class NotificationPage {
     const notificationPage = currentPages.find(page =>
       page.url().includes(`notification.html#confirm-transaction`)
     );
+
+    notificationPage?.screenshot({
+      path: 'test-results/notification-page-before-message-signature333.png',
+      fullPage: true,
+    });
 
     const homePage = currentPages.find(page =>
       page.url().includes(`galxe.com`)
