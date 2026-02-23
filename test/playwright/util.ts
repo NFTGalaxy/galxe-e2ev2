@@ -17,6 +17,8 @@ export const handleLogin = async (
     extensionId
   );
 
+  const _page = await page.context().newPage();
+
   await page.goto(url); // test
 
   await page.locator('.e2e-login-btn').first().click();
@@ -41,13 +43,13 @@ export const handleLogin = async (
   console.log('confirmSignature success');
   await delay(3000);
 
-  await page.goto(url); // test
+  await _page.goto(url); // test
 
-  await page.screenshot({
+  await _page.screenshot({
     path: 'test-results/mm-login222.png',
     fullPage: true,
   });
 
-  console.log('page.url()', page.url());
-  return page;
+  console.log('page.url()', _page.url());
+  return _page;
 };
