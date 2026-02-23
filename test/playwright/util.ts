@@ -17,8 +17,6 @@ export const handleLogin = async (
     extensionId
   );
 
-  const _page = await page.context().newPage();
-
   await page.goto(url); // test
 
   await page.locator('.e2e-login-btn').first().click();
@@ -35,6 +33,10 @@ export const handleLogin = async (
 
   await metamask.connectToDapp();
 
+  // connectToDapp 关闭 notification 弹窗后，将焦点切回 dapp 页面
+  await page.bringToFront();
+  await delay(1000);
+
   await page.screenshot({
     path: 'test-results/mm-login-sign222.png',
     fullPage: true,
@@ -44,6 +46,9 @@ export const handleLogin = async (
   await delay(3000);
 
   await metamask.confirmSignature();
+
+  // confirmSignature 关闭 notification 弹窗后，将焦点切回 dapp 页面
+  await page.bringToFront();
   await delay(3000);
 
   await page.screenshot({
