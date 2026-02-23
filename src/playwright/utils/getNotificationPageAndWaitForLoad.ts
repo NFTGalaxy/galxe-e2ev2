@@ -32,16 +32,16 @@ export async function getNotificationPageAndWaitForLoad(
         //   timeout: NOTIFICATION_PAGE_TIMEOUT
         // })
 
-        try {
-          notificationPage = await context.waitForEvent('page', {
-            predicate: isNotificationPage,
-            timeout: 3000,
-          });
-        } catch {
-          // headless 模式 fallback：手动在新 tab 打开 notification.html
-          notificationPage = await context.newPage();
-          await notificationPage.goto(notificationPageUrl);
-        }
+        // try {
+        //   notificationPage = await context.waitForEvent('page', {
+        //     predicate: isNotificationPage,
+        //     timeout: 3000,
+        //   });
+        // } catch {
+        // headless 模式 fallback：手动在新 tab 打开 notification.html
+        notificationPage = await context.newPage();
+        await notificationPage.goto(notificationPageUrl);
+        //   }
       }
 
       // console.log('notificationPage', notificationPage)
