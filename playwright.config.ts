@@ -25,7 +25,7 @@ export default defineConfig({
   globalTimeout: 180 * 1000,
 
   // Use half of the number of logical CPU cores for running tests in parallel.
-  workers: undefined,
+  workers: 1,
 
   use: {
     // We are using locally deployed MetaMask Test Dapp.
