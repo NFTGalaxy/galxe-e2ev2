@@ -8,6 +8,36 @@ import { addObjectToLocalStorageWithInitScript, payload } from './login-mock';
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup));
 
+/**
+ * Dumps auth-related browser state for the current page URL.
+ * Helps verify whether cookie/localStorage based mock login is actually applied.
+ */
+const dumpPageAuthState = async (page: any) => {
+  const currentUrl = page.url();
+  // Read both full cookie jar and URL-scoped cookies to diagnose domain/path mismatch issues.
+  // const allCookies = await page.context().cookies();
+  const cookies = await page.context().cookies([currentUrl]);
+  const localStorageData = await page.evaluate(() => {
+    const data: Record<string, string | null> = {};
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (key) {
+        data[key] = localStorage.getItem(key);
+      }
+    }
+    return data;
+  });
+
+  console.log('current url:', currentUrl);
+  console.log('cookies:', JSON.stringify(cookies, null, 2));
+  console.log('localStorage:', JSON.stringify(localStorageData, null, 2));
+};
+
+const auth = {
+  authorization:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItNTUxNDkzNDE2LjE3NzE5MDIxNjgiLCJHYWx4ZUlEIjoidG1nWk5zaXV2NHBuTms2cnhDNjJiYyIsImV4cCI6MTc3MjUwODM2OSwianRpIjoiNGFiYmVhMzg3YzM5ZjcyNDcyY2M2NjZiNDdlMjQ2NWJjZGI0YzQ0YWYyOTk1MGVkNGEwMzZjZWQ5YTI2NTAxNyIsIkFkZHJlc3MiOiIxNjM4MDA4NTgxNDkxNDIxMTg0IiwiQWRkcmVzc1R5cGUiOjEwLCJBY2NvdW50VXNlcm5hbWUiOiJLYWlMSTk2NDk1OTY3MDMifQ.5TpVj3Q83Vwcyk5w3whUy0wX8xFkma4HYfSC7RtUt24',
+};
+
 const getCookies = () => {
   return [
     {
@@ -20,20 +50,30 @@ const getCookies = () => {
       secure: false, // Optional: If true, the cookie is only sent over HTTPS
       sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
     },
-    {
-      name: 'chainId',
-      value: '56',
-      domain: 'app.galxe.com', // The domain for which the cookie is valid
-      path: '/', // The path for which the cookie is valid
-      expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
-      httpOnly: false, // Optional: If true, the cookie is not accessible via JavaScript
-      secure: false, // Optional: If true, the cookie is only sent over HTTPS
-      sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
-    },
+    // {
+    //   name: 'connectMethod',
+    //   value: 'MetaMask',
+    //   domain: 'app.galxe.com', // The domain for which the cookie is valid
+    //   path: '/', // The path for which the cookie is valid
+    //   expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
+    //   httpOnly: false, // Optional: If true, the cookie is not accessible via JavaScript
+    //   secure: false, // Optional: If true, the cookie is only sent over HTTPS
+    //   sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
+    // },
+    // {
+    //   name: 'chainId',
+    //   value: '1',
+    //   domain: 'app.galxe.com', // The domain for which the cookie is valid
+    //   path: '/', // The path for which the cookie is valid
+    //   expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
+    //   httpOnly: false, // Optional: If true, the cookie is not accessible via JavaScript
+    //   secure: false, // Optional: If true, the cookie is only sent over HTTPS
+    //   sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
+    // },
     {
       name: 'auth-token',
-      value:
-        '{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItNjE4NzEzMTQwLjE3Njc3NzcwMjUiLCJHYWx4ZUlEIjoidG1nWk5zaXV2NHBuTms2cnhDNjJiYyIsImV4cCI6MTc3MjQxNDA3NywianRpIjoiNmVhZGZlZGQ5Mjg2YjhjMGM3ZTlkN2JkZDhlNzBmYTM0N2Y2ZWU2YjFmNDc5YzViYmE1OGJkYTllODkwOTE2ZiIsIkFkZHJlc3MiOiIweDkzQ2IxYTRBOUJkZWEwOTE2MjU0ODI0M2ZEMjk4RjU3Y0ZjMjdGNzAiLCJBZGRyZXNzVHlwZSI6MSwiQWNjb3VudFVzZXJuYW1lIjoiIn0.GsPbRFTz8ODBhsPJItwZpcLjTfLnnUIiBjIrz6yVzV4"}',
+      // Encode JSON cookie value to satisfy browser cookie character constraints.
+      value: JSON.stringify(auth),
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -41,19 +81,11 @@ const getCookies = () => {
       secure: false, // Optional: If true, the cookie is only sent over HTTPS
       sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
     },
-    {
-      name: 'connectMethod',
-      value: 'MetaMask',
-      domain: 'app.galxe.com', // The domain for which the cookie is valid
-      path: '/', // The path for which the cookie is valid
-      expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
-      httpOnly: false, // Optional: If true, the cookie is not accessible via JavaScript
-      secure: false, // Optional: If true, the cookie is only sent over HTTPS
-      sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
-    },
+
     {
       name: 'account',
-      value: 'EVM:0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70',
+      value: 'TWITTER:1638008581491421184',
+      // value: 'EVM:0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70',
       domain: 'app.galxe.com', // The domain for which the cookie is valid
       path: '/', // The path for which the cookie is valid
       expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
@@ -61,193 +93,18 @@ const getCookies = () => {
       secure: false, // Optional: If true, the cookie is only sent over HTTPS
       sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
     },
-    {
-      name: 'wagmi.store',
-      value:
-        '{"state":{"connections":{"__type":"Map","value":[["f480d5c8f75",{"accounts":["0x21b1247C0E7822a9a142718962015fAf2fF79c6f"],"chainId":56,"connector":{"id":"metaMaskSDK","name":"MetaMask","type":"metaMask","uid":"f480d5c8f75"}}],["50e3a37087b",{"accounts":["0x08314d54F0d43dA8cc6016bDA324a4dA3D0d770C"],"chainId":1,"connector":{"id":"app.phantom","name":"Phantom","type":"injected","uid":"50e3a37087b"}}]]},"chainId":56,"current":"f480d5c8f75"},"version":2}',
-      domain: 'app.galxe.com', // The domain for which the cookie is valid
-      path: '/', // The path for which the cookie is valid
-      expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
-      httpOnly: false, // Optional: If true, the cookie is not accessible via JavaScript
-      secure: false, // Optional: If true, the cookie is only sent over HTTPS
-      sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
-    },
+    // {
+    //   name: 'wagmi.store',
+    //   value:
+    //     '{"state":{"connections":{"__type":"Map","value":[["29986d0a573",{"accounts":["0x08314d54F0d43dA8cc6016bDA324a4dA3D0d770C"],"chainId":1,"connector":{"id":"app.phantom","name":"Phantom","type":"injected","uid":"29986d0a573"}}],["fc059255299",{"accounts":["0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70"],"chainId":56,"connector":{"id":"metaMaskSDK","name":"MetaMask","type":"metaMask","uid":"fc059255299"}}]]},"chainId":56,"current":"fc059255299"},"version":2}',
+    //   domain: 'app.galxe.com', // The domain for which the cookie is valid
+    //   path: '/', // The path for which the cookie is valid
+    //   expires: -1, // Optional: Expiration date in seconds since epoch. -1 for session cookie.
+    //   httpOnly: false, // Optional: If true, the cookie is not accessible via JavaScript
+    //   secure: false, // Optional: If true, the cookie is only sent over HTTPS
+    //   sameSite: 'Lax' as any, // Optional: 'Strict', 'Lax', or 'None'
+    // },
   ];
-  // return [
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1806372418.550089,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: '_ga',
-  //     path: '/',
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'GA1.1.618713140.1767777025',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1795129372,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: 'intercom-id-x55eon90',
-  //     path: '/',
-  //     sameSite: 'Lax',
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'a43da55e-02b8-47e3-90e6-30ac04b036ba',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1795129372,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: 'intercom-device-id-x55eon90',
-  //     path: '/',
-  //     sameSite: 'Lax',
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: '51a3372e-2ba2-4259-9399-83f1c0610777',
-  //   },
-  //   {
-  //     domain: '.app.galxe.com',
-  //     expirationDate: 1802414294.11545,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: '_ga_F9J18S6WJV',
-  //     path: '/',
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'deleted',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1772404172,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: 'intercom-session-x55eon90',
-  //     path: '/',
-  //     sameSite: 'Lax' as any,
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: '',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1805420009.348305,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: '_ga_6V7FNY6Y0J',
-  //     path: '/',
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'GS2.1.s1770860009$o3$g0$t1770860009$j60$l0$h0',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1772423398,
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'galxe-id',
-  //     path: '/',
-  //     secure: true,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'tmgZNsiuv4pnNk6rxC62bc',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'wagmi.recentConnectorId',
-  //     path: '/',
-  //     sameSite: 'Lax' as any,
-  //     secure: false,
-  //     session: true,
-  //     storeId: '0',
-  //     value: '"metaMaskSDK"',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'wagmi.store',
-  //     path: '/',
-  //     sameSite: 'Lax' as any,
-  //     secure: false,
-  //     session: true,
-  //     storeId: '0',
-  //     value:
-  //       '{"state":{"connections":{"__type":"Map","value":[["4da381a266a",{"accounts":["0x08314d54F0d43dA8cc6016bDA324a4dA3D0d770C"],"chainId":1,"connector":{"id":"app.phantom","name":"Phantom","type":"injected","uid":"4da381a266a"}}],["db68b7bc4da",{"accounts":["0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70"],"chainId":56,"connector":{"id":"metaMaskSDK","name":"MetaMask","type":"metaMask","uid":"db68b7bc4da"}}]]},"chainId":56,"current":"db68b7bc4da"},"version":2}',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1772423398,
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'connectMethod',
-  //     path: '/',
-  //     secure: true,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'MetaMask',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1772423398,
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'chainId',
-  //     path: '/',
-  //     secure: true,
-  //     session: false,
-  //     storeId: '0',
-  //     value: '56',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1772414076,
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'auth-token',
-  //     path: '/',
-  //     secure: true,
-  //     session: false,
-  //     storeId: '0',
-  //     value:
-  //       '{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItNjE4NzEzMTQwLjE3Njc3NzcwMjUiLCJHYWx4ZUlEIjoidG1nWk5zaXV2NHBuTms2cnhDNjJiYyIsImV4cCI6MTc3MjQxNDA3NywianRpIjoiNmVhZGZlZGQ5Mjg2YjhjMGM3ZTlkN2JkZDhlNzBmYTM0N2Y2ZWU2YjFmNDc5YzViYmE1OGJkYTllODkwOTE2ZiIsIkFkZHJlc3MiOiIweDkzQ2IxYTRBOUJkZWEwOTE2MjU0ODI0M2ZEMjk4RjU3Y0ZjMjdGNzAiLCJBZGRyZXNzVHlwZSI6MSwiQWNjb3VudFVzZXJuYW1lIjoiIn0.GsPbRFTz8ODBhsPJItwZpcLjTfLnnUIiBjIrz6yVzV4"}',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1772423398,
-  //     hostOnly: true,
-  //     httpOnly: false,
-  //     name: 'account',
-  //     path: '/',
-  //     secure: true,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'EVM:0x93Cb1a4A9Bdea09162548243fD298F57cFc27F70',
-  //   },
-  //   {
-  //     domain: 'app.galxe.com',
-  //     expirationDate: 1806378598.473959,
-  //     hostOnly: false,
-  //     httpOnly: false,
-  //     name: '_ga_F9J18S6WJV',
-  //     path: '/',
-  //     secure: false,
-  //     session: false,
-  //     storeId: '0',
-  //     value: 'GS2.1.s1771818463$o175$g1$t1771818598$j16$l0$h0',
-  //   },
-  // ];
 };
 
 test('check browser version', async ({ context, page, extensionId }) => {
@@ -262,7 +119,14 @@ test('check browser version', async ({ context, page, extensionId }) => {
   // const page = await context.newPage();
   await page.goto('https://app.galxe.com'); // test
 
-  await delay(3000);
+  await dumpPageAuthState(page);
+
+  await delay(7000);
+
+  // await page.getByPlaceholder('Enter Username').fill('likaibotacounttwitter');
+
+  // await page.getByRole('button', { name: 'Sign up' }).click();
+  // await delay(3000);
 
   await page.screenshot({
     path: 'test-results/screenshot5.png',

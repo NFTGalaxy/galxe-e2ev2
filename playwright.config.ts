@@ -14,7 +14,7 @@ export default defineConfig({
     'test/playwright/apps/*',
     'test/playwright/dashboard/*',
     'test/playwright/e2e/*',
-    'test/playwright/other/app-mock-login.spec.ts',
+    'test/playwright/other/app-login.spec.ts',
     // 'test/playwright/e2e/quest-e2e-custom-visit.spec.ts',
   ],
 
