@@ -1,0 +1,281 @@
+import type { Page } from '@playwright/test'
+
+import Selectors from '../../../selectors/pages/NotificationPage'
+import type { GasSettings } from '../../../type/GasSettings'
+import { getNotificationPageAndWaitForLoad } from '../../utils/getNotificationPageAndWaitForLoad'
+import {
+  approvePermission,
+  connectToDapp,
+  decryptMessage,
+  ethereumRpc,
+  network,
+  providePublicEncryptionKey,
+  signSimpleMessage,
+  signStructuredMessage,
+  token,
+  transaction,
+} from './actions'
+
+export class NotificationPage {
+  static readonly selectors = Selectors
+  readonly selectors = Selectors
+
+  readonly page: Page
+
+  constructor(page: Page) {
+    this.page = page
+  }
+
+  async connectToDapp(extensionId: string, accounts?: string[]) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await connectToDapp(notificationPage, accounts)
+    return await this.page.context().newPage()
+  }
+
+  // TODO: Revisit this logic in the future to see if we can increase the performance by utilizing `Promise.race`.
+  private async beforeMessageSignature(extensionId: string) {
+    // const currentPages = this.page.context().pages()
+    // console.log(
+    //   'sign in pages url',
+    //   currentPages.map((page) => page.url()),
+    // )
+
+    // this.page.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature222.png',
+    //   fullPage: true,
+    // });
+
+    //  个人魔改版本
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    // const notificationPage = currentPages.find(page =>
+    //   page.url().includes(`notification.html#confirm-transaction`)
+    // );
+
+    // notificationPage?.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature333.png',
+    //   fullPage: true,
+    // });
+
+    // const homePage = currentPages.find(page =>
+    //   page.url().includes(`galxe.com`)
+    // );
+
+    if (!notificationPage) {
+      throw new Error('Notification page not found')
+    }
+
+    const scrollButton = notificationPage.locator(
+      Selectors.SignaturePage.structuredMessage.scrollDownButton,
+    )
+    const isScrollButtonPresent = (await scrollButton.count()) > 0
+
+    let isScrollButtonVisible = false
+    if (isScrollButtonPresent) {
+      await scrollButton.waitFor({ state: 'visible' })
+      isScrollButtonVisible = true
+    }
+    // homePage?.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature.png',
+    //   fullPage: true,
+    // });
+
+    return {
+      notificationPage,
+      isScrollButtonVisible,
+    }
+  }
+
+  async signMessage(extensionId: string) {
+    const { notificationPage, isScrollButtonVisible } =
+      await this.beforeMessageSignature(extensionId)
+    if (isScrollButtonVisible) {
+      // console.log('visible scroll button')
+      await signStructuredMessage.sign(notificationPage)
+    } else {
+      // console.log('not visible scroll button')
+      await signSimpleMessage.sign(notificationPage)
+    }
+    // await delay(3000);
+    // notificationPage.goto('https://app.galxe.com');
+    // await delay(3000);
+    // notificationPage.screenshot({
+    //   path: 'test-results/notification-page-before-message-signature444.png',
+    //   fullPage: true,
+    // });
+    return await this.page.context().newPage()
+  }
+
+  async signMessageWithRisk(extensionId: string) {
+    const { notificationPage } = await this.beforeMessageSignature(extensionId)
+
+    await signSimpleMessage.signWithRisk(notificationPage)
+  }
+
+  async rejectMessage(extensionId: string) {
+    const { notificationPage, isScrollButtonVisible } =
+      await this.beforeMessageSignature(extensionId)
+
+    if (isScrollButtonVisible) {
+      await signStructuredMessage.reject(notificationPage)
+    } else {
+      await signSimpleMessage.reject(notificationPage)
+    }
+  }
+
+  async approveNewNetwork(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await network.approveNewNetwork(notificationPage)
+  }
+
+  async rejectNewNetwork(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await network.rejectNewNetwork(notificationPage)
+  }
+
+  async approveSwitchNetwork(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await network.approveSwitchNetwork(notificationPage)
+  }
+
+  async rejectSwitchNetwork(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await network.rejectSwitchNetwork(notificationPage)
+  }
+
+  async approveNewEthereumRPC(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await ethereumRpc.approveNewEthereumRPC(notificationPage)
+  }
+
+  async rejectNewEthereumRPC(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await ethereumRpc.rejectNewEthereumRPC(notificationPage)
+  }
+
+  async confirmTransaction(
+    extensionId: string,
+    options?: { gasSetting?: GasSettings },
+  ) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await transaction.confirm(notificationPage, options?.gasSetting ?? 'site')
+  }
+
+  async rejectTransaction(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await transaction.reject(notificationPage)
+  }
+
+  async confirmTransactionAndWaitForMining(
+    extensionId: string,
+    options?: { gasSetting?: GasSettings },
+  ) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await transaction.confirmAndWaitForMining(
+      this.page,
+      notificationPage,
+      options?.gasSetting ?? 'site',
+    )
+  }
+
+  async approveTokenPermission(
+    extensionId: string,
+    options?: { spendLimit?: 'max' | number; gasSetting?: GasSettings },
+  ) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    if (options?.spendLimit !== undefined) {
+      await approvePermission.editTokenPermission(
+        notificationPage,
+        options.spendLimit,
+      )
+    }
+
+    await approvePermission.approve(
+      notificationPage,
+      options?.gasSetting ?? 'site',
+    )
+  }
+
+  async rejectTokenPermission(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await approvePermission.reject(notificationPage)
+  }
+
+  async addNewToken(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await token.addNew(notificationPage)
+  }
+
+  async providePublicEncryptionKey(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await providePublicEncryptionKey(notificationPage)
+  }
+
+  async decryptMessage(extensionId: string) {
+    const notificationPage = await getNotificationPageAndWaitForLoad(
+      this.page.context(),
+      extensionId,
+    )
+
+    await decryptMessage(notificationPage)
+  }
+}
