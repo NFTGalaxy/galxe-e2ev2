@@ -239,7 +239,7 @@
 - 文档中提及的 `Worldcoin` 专用 verify 分支（原 T3-5）当前未在 `apps/*` 自动化用例中落地，建议新增独立 `VC-013`。
 
 ### 10.4 运行依赖（环境变量）
-- Quest 基础：`PW_QUEST_APP_DOMAIN`、`PW_QUEST_SPACE_ALIAS`、`PW_QUEST_VALID_ID`。
+- Quest 基础：`APP_DOMAIN`、`PW_QUEST_SPACE_ALIAS`、`PW_QUEST_VALID_ID`。
 - Bootstrap/Verify/Claim 分支：
   - `PW_QUEST_INACTIVE_ID`
   - `PW_QUEST_PARENT_COLLECTION_ID`

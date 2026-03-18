@@ -1,9 +1,7 @@
 import { type BrowserContext, expect, type Page } from '@playwright/test'
 
 import { handleLogin } from '../../../test/playwright/util'
-
-export const DASHBOARD_DOMAIN =
-  process.env.PW_DASHBOARD_DOMAIN ?? 'https://dashboard.galxe.com'
+import { DASHBOARD_DOMAIN } from './config'
 
 export const SPACE_ID = process.env.PW_CREATE_SPACE_ID ?? '1659'
 

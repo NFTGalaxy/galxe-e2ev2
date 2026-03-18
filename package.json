@@ -21,7 +21,11 @@
     "dashboard": "HEADLESS=true login=mock env=dashboard playwright test test/playwright/dashboard --trace on",
     "e2e:mm": "HEADLESS=true playwright test test/playwright/core  --trace on",
     "e2e": "HEADLESS=true login=mock env=dashboard playwright test test/playwright/core  --trace on",
-    "login": "HEADLESS=true login=mock env=dashboard playwright test test/playwright/login  --trace on"
+    "login": "HEADLESS=true login=mock env=dashboard playwright test test/playwright/login  --trace on",
+    "all-beta": "HEADLESS=true login=mock domain=beta playwright test --trace on",
+    "app-beta": "HEADLESS=true env=app domain=beta login=mock playwright test --trace on",
+    "dashboard-beta": "HEADLESS=true login=mock domain=beta env=dashboard playwright test test/playwright/dashboard --trace on",
+    "e2e-beta": "HEADLESS=true login=mock domain=beta env=dashboard playwright test test/playwright/core  --trace on"
   },
   "dependencies": {
     "@playwright/test": "1.48.2",

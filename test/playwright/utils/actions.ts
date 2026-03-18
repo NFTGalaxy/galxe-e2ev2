@@ -1,11 +1,9 @@
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 
-export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
+import { DASHBOARD_DOMAIN } from './config'
 
-export const appDomain =
-  'https://galxe-web-git-feat-likaiagent-e2e-galxe.vercel.app'
-export const dashboardDomain = 'https://dashboard.galxe.com'
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
 // Release quest
 export const release = async (page: Page) => {
@@ -32,12 +30,13 @@ export const release = async (page: Page) => {
 
   let url = await page.url()
 
-  if (url.includes(dashboardDomain)) {
-    await delay(5000)
+  // 避免有时候网速慢url没有刷新
+  if (url.includes(DASHBOARD_DOMAIN)) {
+    await delay(3000)
     url = await page.url()
   }
 
-  return url.replace('https://app.stg.galxe.com', appDomain)
+  return url
 }
 
 export const nextStep = async (page: Page) => {

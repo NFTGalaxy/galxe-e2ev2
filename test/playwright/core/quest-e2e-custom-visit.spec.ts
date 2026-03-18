@@ -16,9 +16,6 @@ import basicSetup from '../wallet-setup/basic.setup'
 
 const test = testWithSynpress(metaMaskFixtures(basicSetup))
 
-const dashboardDomain = 'https://dashboard.galxe.com'
-// const domain = "https://dashboard.galxe.com"
-
 /**
  * 端到端测试：创建Custom Reward + Visit Page的Quest，然后进行验证
  *
@@ -38,12 +35,14 @@ test.skip('E2E: Create Custom Reward Quest with Visit Page and Verify', async ({
 
   // 1. 登录和导航到 Quest 创建页面
   const testPage = await handleLogin(
-    dashboardDomain,
+    process.env.PW_DASHBOAR_DOMAIN || 'https://dashboard.galxe.com',
     context,
     page,
     extensionId,
   )
-  await testPage.goto(`${dashboardDomain}/quest/create?space=1659`) // 测试空间 ID
+  await testPage.goto(
+    `${process.env.PW_DASHBOAR_DOMAIN || 'https://dashboard.galxe.com'}/quest/create?space=1659`,
+  ) // 测试空间 ID
 
   // 等待页面加载完成
   await delay(3000)

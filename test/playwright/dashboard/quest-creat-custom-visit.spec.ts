@@ -2,7 +2,8 @@ import { testWithSynpress } from '@synthetixio/synpress-core'
 
 import { metaMaskFixtures } from '../../../src/playwright'
 import { handleLogin } from '../util'
-import { dashboardDomain, delay, nextStep } from '../utils/actions'
+import { delay, nextStep } from '../utils/actions'
+import { DASHBOARD_DOMAIN } from '../utils/config'
 // Step 1: 基本信息设置
 import { setStep1 } from '../utils/step1'
 // Step 2: 奖励设置 - NFT
@@ -31,12 +32,12 @@ test('Custom reward with visit page credential', async ({
 }) => {
   // 1. 登录和导航到 Quest 创建页面
   const testPage = await handleLogin(
-    dashboardDomain,
+    DASHBOARD_DOMAIN,
     context,
     page,
     extensionId,
   )
-  await testPage.goto(`${dashboardDomain}/quest/create?space=1659`)
+  await testPage.goto(`${DASHBOARD_DOMAIN}/quest/create?space=1659`)
 
   // 等待页面加载
   await delay(3000)

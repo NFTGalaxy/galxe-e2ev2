@@ -3,10 +3,16 @@ import { type BrowserContext, expect, type Page } from '@playwright/test'
 import { handleLogin } from '../../../test/playwright/util'
 import { closeLevelUpModal } from '../../../test/playwright/utils/verify'
 
-export const QUEST_APP_DOMAIN =
-  process.env.PW_QUEST_APP_DOMAIN ?? 'https://app.galxe.com'
+export const APP_DOMAIN = process.env.DOMAIN
+  ? 'https://app.beta.galxe.com'
+  : 'https://app.galxe.com'
 
-export const QUEST_SPACE_ALIAS = process.env.PW_QUEST_SPACE_ALIAS ?? 'fico'
+export const DASHBOARD_DOMAIN = process.env.DOMAIN
+  ? 'https://dashboard.beta.galxe.com'
+  : 'https://dashboard.galxe.com'
+
+export const QUEST_SPACE_ALIAS =
+  process.env.PW_QUEST_SPACE_ALIAS ?? 'Web3TestSpace'
 
 export const QUEST_IDS = {
   valid: process.env.PW_QUEST_VALID_ID ?? 'GCHrEU4Gxq',
@@ -31,7 +37,7 @@ export const CREDENTIAL_TEST_IDS = {
 }
 
 export function buildQuestUrl(questId: string, spaceAlias = QUEST_SPACE_ALIAS) {
-  return `${QUEST_APP_DOMAIN}/quest/${spaceAlias}/${questId}`
+  return `${APP_DOMAIN}/quest/${spaceAlias}/${questId}`
 }
 
 export async function openQuest(page: Page, questId: string) {
@@ -46,12 +52,7 @@ export async function loginAndOpenQuest(
   extensionId: string,
   questId: string,
 ) {
-  const testPage = await handleLogin(
-    QUEST_APP_DOMAIN,
-    context,
-    page,
-    extensionId,
-  )
+  const testPage = await handleLogin(APP_DOMAIN, context, page, extensionId)
   await openQuest(testPage, questId)
   return testPage
 }
