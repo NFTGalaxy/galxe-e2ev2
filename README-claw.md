@@ -8,3 +8,4 @@ Choose one script to run test cases and tell bot in thread.
 - app-beta: app cases on beta env
 - dashboard-beta: dashboard cases on beta env
 - e2e-beta: Full process on beta env
+- pw:spec:biz-payment: 运行 OpenSpec `2026-03-12-replace-daimo-pay-biz-payment` 生成的 Biz Payment Playwright 用例（目录：test/playwright/spec-biz-payment-20260318）
