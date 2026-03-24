@@ -86,7 +86,7 @@ test('E2E Points奖励 Follow Space & Space Quest Participant', async ({
   // console.log('🚀 发布 Quest...')
   const questUrl = await release(testPage)
 
-  // console.log('questUrl', questUrl)
+  console.log('questUrl', questUrl)
   await delay(5000)
 
   // ========== 阶段 2: Quest 验证 ==========
