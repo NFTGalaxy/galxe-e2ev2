@@ -74,6 +74,9 @@ export class MetaMask extends MetaMaskAbstract {
    */
   readonly settingsPage: SettingsPage
 
+  readonly context: BrowserContext
+  readonly page: Page
+
   /**
    * Creates an instance of MetaMask.
    *
@@ -83,12 +86,14 @@ export class MetaMask extends MetaMaskAbstract {
    * @param extensionId - The ID of the MetaMask extension. Optional if no interaction with dapps is required.
    */
   constructor(
-    readonly context: BrowserContext,
-    readonly page: Page,
-    override readonly password: string,
-    override readonly extensionId?: string,
+    context: BrowserContext,
+    page: Page,
+    password: string,
+    extensionId?: string,
   ) {
     super(password, extensionId)
+    this.context = context
+    this.page = page
 
     this.crashPage = new CrashPage()
     this.onboardingPage = new OnboardingPage(page)

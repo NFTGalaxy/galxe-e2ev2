@@ -4,21 +4,22 @@ import type { Network } from './Network'
 
 export abstract class MetaMaskAbstract {
   /**
+   * The password of the MetaMask wallet.
+   */
+  readonly password: string
+
+  /**
+   * The extension ID of the MetaMask extension. Optional if no interaction with the dapp is required.
+   */
+  readonly extensionId?: string
+
+  /**
    * @param password - The password of the MetaMask wallet.
    * @param extensionId - The extension ID of the MetaMask extension. Optional if no interaction with the dapp is required.
    *
    * @returns A new instance of the MetaMask class.
    */
-  constructor(
-    /**
-     * The password of the MetaMask wallet.
-     */
-    readonly password: string,
-    /**
-     * The extension ID of the MetaMask extension. Optional if no interaction with the dapp is required.
-     */
-    readonly extensionId?: string,
-  ) {
+  constructor(password: string, extensionId?: string) {
     this.password = password
     this.extensionId = extensionId
   }

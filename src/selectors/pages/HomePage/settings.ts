@@ -1,17 +1,20 @@
 import { createDataTestSelector } from '../../createDataTestSelector'
 
-export enum SettingsSidebarMenus {
-  General = 1,
-  Advanced = 2,
+export const SettingsSidebarMenus = {
+  General: 1,
+  Advanced: 2,
 
   /// ---- Unused Selectors ----
-  // Contacts = 3,
-  // SecurityAndPrivacy = 4,
-  // Alerts = 5,
-  // Networks = 6,
-  // Experimental = 7,
-  // About = 8
-}
+  // Contacts: 3,
+  // SecurityAndPrivacy: 4,
+  // Alerts: 5,
+  // Networks: 6,
+  // Experimental: 7,
+  // About: 8
+} as const
+
+export type SettingsSidebarMenus =
+  (typeof SettingsSidebarMenus)[keyof typeof SettingsSidebarMenus]
 const sidebarMenu = (menu: SettingsSidebarMenus) =>
   `.settings-page__content__tabs .tab-bar__tab.pointer:nth-of-type(${menu})`
 
