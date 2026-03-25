@@ -26,7 +26,8 @@
     "app-beta": "HEADLESS=true env=app domain=beta login=mock playwright test --trace on",
     "dashboard-beta": "HEADLESS=true login=mock domain=beta env=dashboard playwright test test/playwright/dashboard --trace on",
     "e2e-beta": "HEADLESS=true login=mock domain=beta env=dashboard playwright test test/playwright/core  --trace on",
-    "pw:spec:biz-payment": "HEADLESS=true login=mock domain=beta env=dashboard playwright test test/playwright/spec-biz-payment-20260318 --trace on"
+    "pw:spec:biz-payment": "HEADLESS=true login=mock domain=beta env=dashboard playwright test test/playwright/spec-biz-payment-20260318 --trace on",
+    "pw:spec:quest-smart-ranking": "HEADLESS=true login=mock domain=beta playwright test test/playwright/spec-quest-smart-ranking-20260325 --trace on"
   },
   "dependencies": {
     "@playwright/test": "1.48.2",
