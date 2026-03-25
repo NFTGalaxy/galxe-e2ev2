@@ -5,9 +5,10 @@ import basicSetup from './wallet-setup/basic.setup'
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))
 
+// auth-0325
 export const payload = {
   'auth@twitter:1638008581491421184':
-    '{"auth":{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItMzU2OTc2Njk5LjE3NzM4MTEyMjkiLCJHYWx4ZUlEIjoidG1nWk5zaXV2NHBuTms2cnhDNjJiYyIsImV4cCI6MTc3NDQxNjA3MSwianRpIjoiZmNmM2EzNWU0NTYwNDgwZmNkMTQ4M2VhNDVjNmJjZjliYmZmMWM0M2Q3OGU5YWU0MmI3NDhjZGMwZWI1YWIxOSIsIkFkZHJlc3MiOiIxNjM4MDA4NTgxNDkxNDIxMTg0IiwiQWRkcmVzc1R5cGUiOjEwLCJBY2NvdW50VXNlcm5hbWUiOiJLYWlMSTk2NDk1OTY3MDMifQ.6owUFEENYuHqtHhZ8lSL8HQ9c4ZRJpd2_tAaju2RRYQ"},"expire":1774416071000}',
+    '{"auth":{"authorization":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJEZXZpY2VJRCI6ImdhLXVzZXItIiwiR2FseGVJRCI6InRtZ1pOc2l1djRwbk5rNnJ4QzYyYmMiLCJleHAiOjE3NzUwMjUwMDQsImp0aSI6IjJjMWJjYmU4ZTE2YTQxZDEzZDRkZmI1N2E1ZWJjOTZmOGFkY2Y5ZjJmOTIxYzlkMDJkNWNkMWM4ZjFkNTBjNzEiLCJBZGRyZXNzIjoiMTYzODAwODU4MTQ5MTQyMTE4NCIsIkFkZHJlc3NUeXBlIjoxMCwiQWNjb3VudFVzZXJuYW1lIjoiS2FpTEk5NjQ5NTk2NzAzIn0.OuE14DnSsAYyODLY61Xpljm7nxgMN0ztWUyzgGbTF6E"},"expire":1775025004000}',
   userXPLevel: '4:tmgZNsiuv4pnNk6rxC62bc',
 }
 

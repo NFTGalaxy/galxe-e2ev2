@@ -69,46 +69,46 @@ jobs:
           retention-days: 3 # 保留 30 天
           if-no-files-found: ignore # 如果没有文件也不报错
 
-      # # 9. 通知 Slack（始终发送，便于及时同步结果）
-      # - name: Notify Slack about E2E trigger result
-      #   # 汇总前序步骤状态，便于定位失败原因
-      #   if: always()
-      #   # Use the same webhook pattern as the existing Slack workflow.
-      #   uses: slackapi/slack-github-action@v1.27.1
-      #   with:
-      #     payload: |
-      #       {
-      #         "text": "E2E Trigger Notification",
-      #         "blocks": [
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "*E2E trigger finished for `${{ github.ref_name }}`*"
-      #             }
-      #           },
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "*Overall:* ${{ job.status == 'success' && '✅ success' || '❌ failure' }}\n*Workflow:* ${{ github.workflow }}\n*Upstream payload:* ${{ toJson(github.event.client_payload) }}\n*Steps:*\n• Checkout: ${{ steps.checkout.outcome }}\n• Setup Node: ${{ steps.setup-node.outcome }}\n• Install pnpm: ${{ steps.install-pnpm.outcome }}\n• Install deps: ${{ steps.install-deps.outcome }}\n• Install Playwright: ${{ steps.install-playwright.outcome }}\n• Build cache: ${{ steps.build-cache.outcome }}\n• Playwright tests: ${{ steps.run-playwright-tests.outcome }}\n• Stop Test Dapp: ${{ steps.stop-test-dapp.outcome }}\n• Upload results: ${{ steps.upload-artifact.outcome }}"
-      #             }
-      #           },
-      #           {
-      #             "type": "actions",
-      #             "elements": [
-      #               {
-      #                 "type": "button",
-      #                 "text": {
-      #                   "type": "plain_text",
-      #                   "text": "View Run"
-      #                 },
-      #                 "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-      #               }
-      #             ]
-      #           }
-      #         ]
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: https://hooks.slack.com/services/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
-      #     SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      # 9. 通知 Slack（始终发送，便于及时同步结果）
+      - name: Notify Slack about E2E trigger result
+        # 汇总前序步骤状态，便于定位失败原因
+        if: always()
+        # Use the same webhook pattern as the existing Slack workflow.
+        uses: slackapi/slack-github-action@v1.27.1
+        with:
+          payload: |
+            {
+              "text": "E2E Trigger Notification",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*E2E trigger finished for `${{ github.ref_name }}`*"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Overall:* ${{ job.status == 'success' && '✅ success' || '❌ failure' }}\n*Workflow:* ${{ github.workflow }}\n*Upstream payload:* ${{ toJson(github.event.client_payload) }}\n*Steps:*\n• Checkout: ${{ steps.checkout.outcome }}\n• Setup Node: ${{ steps.setup-node.outcome }}\n• Install pnpm: ${{ steps.install-pnpm.outcome }}\n• Install deps: ${{ steps.install-deps.outcome }}\n• Install Playwright: ${{ steps.install-playwright.outcome }}\n• Build cache: ${{ steps.build-cache.outcome }}\n• Playwright tests: ${{ steps.run-playwright-tests.outcome }}\n• Stop Test Dapp: ${{ steps.stop-test-dapp.outcome }}\n• Upload results: ${{ steps.upload-artifact.outcome }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Run"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
