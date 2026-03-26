@@ -10,3 +10,4 @@ Choose one script to run test cases and tell bot in thread.
 - e2e-beta: Full process on beta env
 - pw:spec:biz-payment: 运行 OpenSpec `2026-03-12-replace-daimo-pay-biz-payment` 生成的 Biz Payment Playwright 用例（目录：test/playwright/spec-biz-payment-20260318）
 - `pw:spec:quest-smart-ranking` — Playwright tests for add-quest-smart-ranking spec (Smart Ranking leaderboards, Nav Bar entry, Explore More card, A/B experiment, event tracking)
+- pw:spec:level-based-available-rewards: 运行 OpenSpec `2026-01-20-add-level-based-available-rewards` 生成的等级奖励 Playwright 用例（目录：test/playwright/spec-level-based-available-rewards-20260325）
