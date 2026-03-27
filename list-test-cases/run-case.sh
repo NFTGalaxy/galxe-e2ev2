@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 PROJECT_DIR="${ROOT_PATH}/galxe-web/apps/tests"
-LOG_DIR="/Users/likai.lear/.openclaw/logs"
+LOG_DIR="${HOME}/.openclaw/logs"
 NVM_VERSION="22.11.0"
 LOG_FILE="${LOG_DIR}/galxe-tph-$(date +%Y%m%d-%H%M%S).log"
 
